@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Policies;
+
+use App\Models\ContactRequest;
+use App\Models\User;
+
+class ContactRequestPolicy
+{
+    public function viewAny(User $user): bool
+    {
+        return true;
+    }
+
+    public function create(User $user): bool
+    {
+        return true; // أي مستخدم مسجل يمكنه إنشاء طلب
+    }
+
+    public function view(User $user, ContactRequest $contactRequest): bool
+    {
+        return true; // أي مستخدم يمكنه العرض
+    }
+
+    public function viewMyRequests(User $user): bool
+    {
+        return true; // أي مستخدم
+    }
+
+    public function viewMyReceived(User $user): bool
+    {
+        return true; // أي مستخدم
+    }
+
+    public function viewAnyForAdmin(User $user): bool
+    {
+        return $user->is_admin;
+    }
+
+    public function approve(User $user, ContactRequest $contactRequest): bool
+    {
+        return $user->is_admin;
+    }
+
+    public function reject(User $user, ContactRequest $contactRequest): bool
+    {
+        return $user->is_admin;
+    }
+}

@@ -1,0 +1,2700 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlMiftah API Documentation - توثيق واجهة برمجة التطبيقات</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #059669;
+            --error: #dc2626;
+            --warning: #d97706;
+            --bg: #f8fafc;
+            --bg-dark: #1e293b;
+            --text: #334155;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --code-bg: #1e293b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .version {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Navigation */
+        .nav {
+            background: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .nav-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            list-style: none;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .nav-list a {
+            text-decoration: none;
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .nav-list a:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Section */
+        .section {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .section-header h2 {
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .section-number {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .section-content {
+            padding: 2rem;
+        }
+        
+        /* Endpoint */
+        .endpoint {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            gap: 1rem;
+        }
+        
+        .method {
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .method-get { background: #dbeafe; color: #1d4ed8; }
+        .method-post { background: #dcfce7; color: #166534; }
+        .method-put { background: #fef3c7; color: #92400e; }
+        .method-delete { background: #fee2e2; color: #991b1b; }
+        
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            color: var(--text);
+            flex: 1;
+        }
+        
+        .endpoint-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .endpoint-auth {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            background: #f1f5f9;
+            color: var(--text-light);
+        }
+        
+        .endpoint-auth.required {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .endpoint-body {
+            padding: 1.5rem;
+        }
+        
+        /* Code Block */
+        .code-block {
+            background: var(--code-bg);
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .code-title {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+        
+        .code-lang {
+            color: #60a5fa;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            background: rgba(96, 165, 250, 0.2);
+            border-radius: 4px;
+        }
+        
+        .code-content {
+            padding: 1rem;
+            overflow-x: auto;
+        }
+        
+        pre {
+            margin: 0;
+            color: #e2e8f0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        
+        .json-key { color: #93c5fd; }
+        .json-string { color: #86efac; }
+        .json-number { color: #fcd34d; }
+        .json-boolean { color: #f472b6; }
+        .json-null { color: #94a3b8; }
+        
+        /* Table */
+        .params-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .params-table th {
+            background: #f1f5f9;
+            padding: 0.75rem 1rem;
+            text-align: right;
+            border: 1px solid var(--border);
+            font-weight: 600;
+        }
+        
+        .params-table td {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+        }
+        
+        .param-name {
+            font-family: monospace;
+            color: var(--primary);
+        }
+        
+        .param-required {
+            color: var(--error);
+            font-weight: bold;
+        }
+        
+        .param-optional {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+        
+        .tab:hover {
+            color: var(--primary);
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Response Status */
+        .response-status {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .status-badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .status-success {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        /* Info Box */
+        .info-box {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .info-box.info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+        }
+        
+        .info-box.warning {
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            color: #92400e;
+        }
+        
+        .info-icon {
+            font-size: 1.5rem;
+        }
+        
+        /* Collapsible */
+        .collapsible {
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .collapsible-header {
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        
+        .collapsible-content {
+            display: none;
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+            background: white;
+        }
+        
+        .collapsible.open .collapsible-content {
+            display: block;
+        }
+        
+        .collapsible.open .collapsible-header {
+            background: #e2e8f0;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--bg-dark);
+            color: #94a3b8;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .nav-list {
+                justify-content: center;
+            }
+            
+            .endpoint-header {
+                flex-wrap: wrap;
+            }
+            
+            .endpoint-path {
+                order: 3;
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+            
+            pre {
+                font-size: 0.8rem;
+            }
+        }
+        
+        /* Search */
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            font-size: 1rem;
+            direction: ltr;
+            text-align: right;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        /* Table of Contents */
+        .toc {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .toc h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .toc-list {
+            list-style: none;
+        }
+        
+        .toc-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .toc-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .toc-list a {
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .toc-list a:hover {
+            color: var(--primary);
+        }
+        
+        .toc-method {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🏠 AlMiftah API Documentation</h1>
+        <p>توثيق شامل لواجهة برمجة تطبيقات نظام العقارات</p>
+        <div class="version">الإصدار 1.0.0</div>
+    </header>
+    
+    <nav class="nav">
+        <ul class="nav-list">
+            <li><a href="#overview">نظرة عامة</a></li>
+            <li><a href="#authentication">المصادقة</a></li>
+            <li><a href="#regions">المناطق</a></li>
+            <li><a href="#properties">العقارات</a></li>
+            <li><a href="#contacts">التواصل</a></li>
+            <li><a href="#notifications">الإشعارات</a></li>
+            <li><a href="#fcm">FCM</a></li>
+            <li><a href="#admin-users">إدارة المستخدمين</a></li>
+            <li><a href="#admin-properties">إدارة العقارات</a></li>
+            <li><a href="#admin-contacts">إدارة الطلبات</a></li>
+            <li><a href="#admin-dashboard">لوحة التحكم</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <!-- Base URL -->
+        <div class="info-box info">
+            <div class="info-icon">🌐</div>
+            <div>
+                <strong>Base URL:</strong>
+                <code style="background: rgba(0,0,0,0.1); padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.5rem;">http://localhost:8000/api</code>
+                <br><br>
+                <strong>Authentication:</strong> Bearer Token
+                <br>
+                <strong>Content-Type:</strong> application/json
+            </div>
+        </div>
+        
+        <!-- API Response Structure -->
+        <section class="section" id="overview">
+            <div class="section-header">
+                <h2><span class="section-number">📋</span> هيكل استجابة API</h2>
+            </div>
+            <div class="section-content">
+                <div class="endpoint">
+                    <div class="endpoint-body">
+                        <h4 style="margin-bottom: 1rem; color: var(--primary);">Success Response - استجابة ناجحة</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">Response Structure</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: <span class="json-null">{...}</span>
+}</pre>
+                            </div>
+                        </div>
+                        
+                        <h4 style="margin: 1.5rem 0 1rem; color: var(--error);">Error Response - استجابة خطأ</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">Response Structure</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">false</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"رسالة الخطأ"</span>,
+  <span class="json-key">"errors"</span>: <span class="json-null">{ field: ["خطأ"] }</span>
+}</pre>
+                            </div>
+                        </div>
+                        
+                        <h4 style="margin: 1.5rem 0 1rem; color: var(--text);">Paginated Response - استجابة مع الترقيم</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">Response Structure</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: [
+    <span class="json-null">{...}</span>,
+    <span class="json-null">{...}</span>
+  ],
+  <span class="json-key">"meta"</span>: {
+    <span class="json-key">"current_page"</span>: <span class="json-number">1</span>,
+    <span class="json-key">"last_page"</span>: <span class="json-number">10</span>,
+    <span class="json-key">"per_page"</span>: <span class="json-number">15</span>,
+    <span class="json-key">"total"</span>: <span class="json-number">150</span>
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Authentication -->
+        <section class="section" id="authentication">
+            <div class="section-header">
+                <h2><span class="section-number">1</span> المصادقة (Authentication)</h2>
+            </div>
+            <div class="section-content">
+                
+                <!-- Register -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/auth/register</span>
+                        <span class="endpoint-auth">تسجيل مستخدم جديد</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="info-box info">
+                            <div class="info-icon">ℹ️</div>
+                            <div>إنشاء حساب مستخدم جديد في النظام. الدور الافتراضي هو <code>user</code> ما لم يُحدد غير ذلك.</div>
+                        </div>
+                        
+                        <h4>Headers</h4>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>المفتاح</th>
+                                    <th>القيمة</th>
+                                    <th>الوصف</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>Accept</code></td>
+                                    <td><code>application/json</code></td>
+                                    <td>نوع المحتوى المطلوب</td>
+                                </tr>
+                                <tr>
+                                    <td><code>Content-Type</code></td>
+                                    <td><code>application/json</code></td>
+                                    <td>نوع البيانات المرسلة</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4>Body (Request Body)</h4>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>المعامل</th>
+                                    <th>النوع</th>
+                                    <th>مطلوب</th>
+                                    <th>الوصف</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">name</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>اسم المستخدم الكامل</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">email</span></td>
+                                    <td>email</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>البريد الإلكتروني (يجب أن يكون فريداً)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">phone</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>رقم الهاتف السوري (يجب أن يبدأ بـ +963 أو 09)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">password</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>كلمة المرور (8+ أحرف، يجب أن تحتوي أحرف وأرقام)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">password_confirmation</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>تأكيد كلمة المرور</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">role</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-optional">لا</span></td>
+                                    <td>الدور: <code>user</code>, <code>owner</code> (الافتراضي: user)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">مثال على الطلب</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"name"</span>: <span class="json-string">"أحمد محمد"</span>,
+  <span class="json-key">"email"</span>: <span class="json-string">"ahmed@example.com"</span>,
+  <span class="json-key">"phone"</span>: <span class="json-string">"+963944123456"</span>,
+  <span class="json-key">"password"</span>: <span class="json-string">"Password123"</span>,
+  <span class="json-key">"password_confirmation"</span>: <span class="json-string">"Password123"</span>,
+  <span class="json-key">"role"</span>: <span class="json-string">"owner"</span>
+}</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="response-status">
+                            <span class="status-badge status-success">200 - نجاح</span>
+                            <span class="status-badge status-error">422 - خطأ في التحقق</span>
+                        </div>
+                        
+                        <div class="tabs">
+                            <button class="tab active" onclick="showTab(this, 'reg-success')">استجابة ناجحة</button>
+                            <button class="tab" onclick="showTab(this, 'reg-error')">استجابة خطأ</button>
+                        </div>
+                        
+                        <div id="reg-success" class="tab-content active">
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-title">200 OK - الاستجابة الناجحة</span>
+                                    <span class="code-lang">JSON</span>
+                                </div>
+                                <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"token"</span>: <span class="json-string">"1|abc123xyz..."</span>,
+  <span class="json-key">"data"</span>: {
+    <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+    <span class="json-key">"name"</span>: <span class="json-string">"أحمد محمد"</span>,
+    <span class="json-key">"email"</span>: <span class="json-string">"ahmed@example.com"</span>,
+    <span class="json-key">"phone"</span>: <span class="json-string">"+963944123456"</span>,
+    <span class="json-key">"role"</span>: <span class="json-string">"owner"</span>,
+    <span class="json-key">"created_at"</span>: <span class="json-string">"2024-01-15T10:30:00"</span>
+  }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="reg-error" class="tab-content">
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-title">422 Validation Error - خطأ في التحقق</span>
+                                    <span class="code-lang">JSON</span>
+                                </div>
+                                <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">false</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"بيانات غير صالحة"</span>,
+  <span class="json-key">"errors"</span>: {
+    <span class="json-key">"email"</span>: [
+      <span class="json-string">"البريد الإلكتروني مستخدم مسبقاً"</span>
+    ],
+    <span class="json-key">"phone"</span>: [
+      <span class="json-string">"رقم الهاتف يجب أن يكون بصيغة سورية صحيحة"</span>
+    ],
+    <span class="json-key">"password"</span>: [
+      <span class="json-string">"كلمة المرور يجب أن تحتوي 8 أحرف على الأقل مع أحرف وأرقام"</span>
+    ]
+  }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Login -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/auth/login</span>
+                        <span class="endpoint-auth">تسجيل الدخول</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">مثال على الطلب</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"email"</span>: <span class="json-string">"admin@almiftah.com"</span>,
+  <span class="json-key">"password"</span>: <span class="json-string">"password123"</span>
+}</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="tabs">
+                            <button class="tab active" onclick="showTab(this, 'login-success')">استجابة ناجحة</button>
+                            <button class="tab" onclick="showTab(this, 'login-error-401')">401 - غير مصرح</button>
+                            <button class="tab" onclick="showTab(this, 'login-error-403')">403 - محظور</button>
+                            <button class="tab" onclick="showTab(this, 'login-error-429')">429 - تجاوز الحد</button>
+                        </div>
+                        
+                        <div id="login-success" class="tab-content active">
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-title">200 OK - تسجيل دخول ناجح</span>
+                                    <span class="code-lang">JSON</span>
+                                </div>
+                                <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"token"</span>: <span class="json-string">"2|xyz789abc..."</span>,
+  <span class="json-key">"data"</span>: {
+    <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+    <span class="json-key">"name"</span>: <span class="json-string">"مدير النظام"</span>,
+    <span class="json-key">"email"</span>: <span class="json-string">"admin@almiftah.com"</span>,
+    <span class="json-key">"role"</span>: <span class="json-string">"admin"</span>,
+    <span class="json-key">"is_verified"</span>: <span class="json-boolean">true</span>
+  }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="login-error-401" class="tab-content">
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-title">401 Unauthorized - بيانات خاطئة</span>
+                                    <span class="code-lang">JSON</span>
+                                </div>
+                                <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">false</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"بيانات الاعتماد غير صحيحة"</span>
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="login-error-403" class="tab-content">
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-title">403 Forbidden - حساب معطل أو محظور</span>
+                                    <span class="code-lang">JSON</span>
+                                </div>
+                                <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">false</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"الحساب محظور. يرجى التواصل مع الإدارة"</span>
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="login-error-429" class="tab-content">
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-title">429 Too Many Requests - تجاوز عدد المحاولات</span>
+                                    <span class="code-lang">JSON</span>
+                                </div>
+                                <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">false</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تجاوزت عدد محاولات تسجيل الدخول. يرجى الانتظار 5 دقائق ثم المحاولة مرة أخرى."</span>,
+  <span class="json-key">"retry_after"</span>: <span class="json-number">300</span>
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Get Current User -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/auth/me</span>
+                        <span class="endpoint-auth required">مطلوب</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="info-box info">
+                            <div class="info-icon">ℹ️</div>
+                            <div>الحصول على بيانات المستخدم الحالي المسجل دخوله. يتطلب إرسال Token في Header.</div>
+                        </div>
+                        
+                        <h4>Headers</h4>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>المفتاح</th>
+                                    <th>القيمة</th>
+                                    <th>الوصف</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>Authorization</code></td>
+                                    <td><code>Bearer {token}</code></td>
+                                    <td>Token المصادقة (مطلوب)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>Accept</code></td>
+                                    <td><code>application/json</code></td>
+                                    <td>نوع المحتوى المطلوب</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="tabs">
+                            <button class="tab active" onclick="showTab(this, 'me-success')">استجابة ناجحة</button>
+                            <button class="tab" onclick="showTab(this, 'me-error')">401 - غير مصرح</button>
+                        </div>
+                        
+                        <div id="me-success" class="tab-content active">
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-title">200 OK - المستخدم الحالي (Admin View)</span>
+                                    <span class="code-lang">JSON</span>
+                                </div>
+                                <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: {
+    <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+    <span class="json-key">"name"</span>: <span class="json-string">"أحمد محمد"</span>,
+    <span class="json-key">"email"</span>: <span class="json-string">"ahmed@example.com"</span>,
+    <span class="json-key">"phone"</span>: <span class="json-string">"+963944123456"</span>,
+    <span class="json-key">"role"</span>: <span class="json-string">"owner"</span>,
+    <span class="json-key">"is_active"</span>: <span class="json-boolean">true</span>,
+    <span class="json-key">"is_verified"</span>: <span class="json-boolean">true</span>,
+    <span class="json-key">"email_verified_at"</span>: <span class="json-string">"2024-01-15T10:30:00"</span>,
+    <span class="json-key">"created_at"</span>: <span class="json-string">"2024-01-15T10:30:00"</span>
+  }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="me-error" class="tab-content">
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-title">401 Unauthorized - غير مصرح</span>
+                                    <span class="code-lang">JSON</span>
+                                </div>
+                                <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">false</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"Unauthenticated."</span>
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Logout -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/auth/logout</span>
+                        <span class="endpoint-auth required">مطلوب</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - تسجيل خروج ناجح</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تم تسجيل الخروج بنجاح"</span>
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Change Password -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/auth/change-password</span>
+                        <span class="endpoint-auth required">مطلوب</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>المعامل</th>
+                                    <th>النوع</th>
+                                    <th>مطلوب</th>
+                                    <th>الوصف</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">current_password</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>كلمة المرور الحالية</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">password</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>كلمة المرور الجديدة (8+ أحرف، أحرف وأرقام)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">password_confirmation</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>تأكيد كلمة المرور الجديدة</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">مثال على الطلب</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"current_password"</span>: <span class="json-string">"OldPassword123"</span>,
+  <span class="json-key">"password"</span>: <span class="json-string">"NewPassword123"</span>,
+  <span class="json-key">"password_confirmation"</span>: <span class="json-string">"NewPassword123"</span>
+}</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - تم تغيير كلمة المرور</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تم تغيير كلمة المرور بنجاح"</span>
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- Regions -->
+        <section class="section" id="regions">
+            <div class="section-header">
+                <h2><span class="section-number">2</span> المناطق (Regions)</h2>
+            </div>
+            <div class="section-content">
+                
+                <!-- List Regions -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/regions</span>
+                        <span class="endpoint-auth">عام</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - قائمة المناطق</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: [
+    {
+      <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+      <span class="json-key">"name"</span>: <span class="json-string">"دمشق"</span>,
+      <span class="json-key">"type"</span>: <span class="json-string">"governorate"</span>,
+      <span class="json-key">"parent_id"</span>: <span class="json-null">null</span>,
+      <span class="json-key">"created_at"</span>: <span class="json-string">"2024-01-01T00:00:00"</span>
+    },
+    {
+      <span class="json-key">"id"</span>: <span class="json-number">2</span>,
+      <span class="json-key">"name"</span>: <span class="json-string">"المزة"</span>,
+      <span class="json-key">"type"</span>: <span class="json-string">"area"</span>,
+      <span class="json-key">"parent_id"</span>: <span class="json-number">1</span>
+    }
+  ]
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Regions Tree -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/regions/tree</span>
+                        <span class="endpoint-auth">عام</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="info-box info">
+                            <div class="info-icon">🌳</div>
+                            <div>عرض المناطق على شكل شجرة هرمية (الأب مع أبنائه)</div>
+                        </div>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - شجرة المناطق</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: [
+    {
+      <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+      <span class="json-key">"name"</span>: <span class="json-string">"دمشق"</span>,
+      <span class="json-key">"type"</span>: <span class="json-string">"governorate"</span>,
+      <span class="json-key">"children"</span>: [
+        {
+          <span class="json-key">"id"</span>: <span class="json-number">2</span>,
+          <span class="json-key">"name"</span>: <span class="json-string">"المزة"</span>,
+          <span class="json-key">"type"</span>: <span class="json-string">"area"</span>,
+          <span class="json-key">"children"</span>: [
+            {
+              <span class="json-key">"id"</span>: <span class="json-number">3</span>,
+              <span class="json-key">"name"</span>: <span class="json-string">"المزة 86"</span>,
+              <span class="json-key">"type"</span>: <span class="json-string">"neighborhood"</span>
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Get Region -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/regions/{id}</span>
+                        <span class="endpoint-auth">عام</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - منطقة محددة</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: {
+    <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+    <span class="json-key">"name"</span>: <span class="json-string">"دمشق"</span>,
+    <span class="json-key">"type"</span>: <span class="json-string">"governorate"</span>,
+    <span class="json-key">"parent_id"</span>: <span class="json-null">null</span>,
+    <span class="json-key">"parent"</span>: <span class="json-null">null</span>,
+    <span class="json-key">"children"</span>: [<span class="json-null">...</span>],
+    <span class="json-key">"properties"</span>: [<span class="json-null">...</span>]
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Create Region (Admin) -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/admin/regions</span>
+                        <span class="endpoint-auth required">Admin فقط</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>المعامل</th>
+                                    <th>النوع</th>
+                                    <th>مطلوب</th>
+                                    <th>الوصف</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">name</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>اسم المنطقة</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">type</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>النوع: governorate, city, area, neighborhood, street</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">parent_id</span></td>
+                                    <td>integer</td>
+                                    <td><span class="param-optional">لا</span></td>
+                                    <td>معرف المنطقة الأم</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">201 Created - تم إنشاء المنطقة</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تم إنشاء المنطقة بنجاح"</span>,
+  <span class="json-key">"data"</span>: {
+    <span class="json-key">"id"</span>: <span class="json-number">5</span>,
+    <span class="json-key">"name"</span>: <span class="json-string">"حمص"</span>,
+    <span class="json-key">"type"</span>: <span class="json-string">"governorate"</span>,
+    <span class="json-key">"parent_id"</span>: <span class="json-null">null</span>,
+    <span class="json-key">"created_at"</span>: <span class="json-string">"2024-01-15T12:00:00"</span>
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- Properties -->
+        <section class="section" id="properties">
+            <div class="section-header">
+                <h2><span class="section-number">3</span> العقارات (Properties)</h2>
+            </div>
+            <div class="section-content">
+                
+                <!-- List Properties -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/properties</span>
+                        <span class="endpoint-auth">عام</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <h4>Query Parameters</h4>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>المعامل</th>
+                                    <th>النوع</th>
+                                    <th>الوصف</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">per_page</span></td>
+                                    <td>integer</td>
+                                    <td>عدد النتائج لكل صفحة (الافتراضي: 15)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">type</span></td>
+                                    <td>string</td>
+                                    <td>النوع: sale, rent</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">property_type</span></td>
+                                    <td>string</td>
+                                    <td>نوع العقار: apartment, villa, house, land, shop, office, warehouse, building</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">region_id</span></td>
+                                    <td>integer</td>
+                                    <td>معرف المنطقة</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">min_price</span></td>
+                                    <td>integer</td>
+                                    <td>الحد الأدنى للسعر</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">max_price</span></td>
+                                    <td>integer</td>
+                                    <td>الحد الأقصى للسعر</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">min_area</span></td>
+                                    <td>integer</td>
+                                    <td>الحد الأدنى للمساحة</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">max_area</span></td>
+                                    <td>integer</td>
+                                    <td>الحد الأقصى للمساحة</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">status</span></td>
+                                    <td>string</td>
+                                    <td>الحالة: active, pending, sold, rented</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">sort_by</span></td>
+                                    <td>string</td>
+                                    <td>الترتيب: created_at, price, area</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">sort_order</span></td>
+                                    <td>string</td>
+                                    <td>نوع الترتيب: asc, desc</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - قائمة العقارات (PropertyResource)</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: [
+    {
+      <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+      <span class="json-key">"owner_id"</span>: <span class="json-number">2</span>,
+      <span class="json-key">"title"</span>: <span class="json-string">"شقة فاخرة 3 غرف"</span>,
+      <span class="json-key">"description"</span>: <span class="json-string">"شقة جديدة طابق رابع"</span>,
+      <span class="json-key">"price"</span>: <span class="json-number">50000000</span>,
+      <span class="json-key">"type"</span>: <span class="json-string">"sale"</span>,
+      <span class="json-key">"property_type"</span>: <span class="json-string">"apartment"</span>,
+      <span class="json-key">"area"</span>: <span class="json-number">150</span>,
+      <span class="json-key">"region_id"</span>: <span class="json-number">1</span>,
+      <span class="json-key">"location"</span>: <span class="json-string">"المزة - دمشق"</span>,
+      <span class="json-key">"latitude"</span>: <span class="json-number">33.5138</span>,
+      <span class="json-key">"longitude"</span>: <span class="json-number">36.2765</span>,
+      <span class="json-key">"status"</span>: <span class="json-string">"active"</span>,
+      <span class="json-key">"is_active"</span>: <span class="json-boolean">true</span>,
+      <span class="json-key">"created_at"</span>: <span class="json-string">"2024-01-15T10:30:00"</span>,
+      <span class="json-key">"region"</span>: {
+        <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+        <span class="json-key">"name"</span>: <span class="json-string">"دمشق"</span>,
+        <span class="json-key">"type"</span>: <span class="json-string">"governorate"</span>
+      },
+      <span class="json-key">"images"</span>: [
+        {
+          <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+          <span class="json-key">"image_url"</span>: <span class="json-string">"http://localhost:8000/api/images/properties/1/image1.jpg"</span>,
+          <span class="json-key">"is_primary"</span>: <span class="json-boolean">true</span>
+        }
+      ]
+    }
+  ],
+  <span class="json-key">"meta"</span>: {
+    <span class="json-key">"current_page"</span>: <span class="json-number">1</span>,
+    <span class="json-key">"last_page"</span>: <span class="json-number">5</span>,
+    <span class="json-key">"per_page"</span>: <span class="json-number">15</span>,
+    <span class="json-key">"total"</span>: <span class="json-number">75</span>
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Create Property -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/properties</span>
+                        <span class="endpoint-auth required">Owner/Admin</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="info-box warning">
+                            <div class="info-icon">⚠️</div>
+                            <div>
+                                <strong>القيود:</strong>
+                                <ul style="margin-top: 0.5rem;">
+                                    <li>فقط الأدوار <code>owner</code> أو <code>admin</code> يمكنها إنشاء عقارات</li>
+                                    <li>الحد الأقصى 400 عقار للمكاتب العقارية (owner)</li>
+                                    <li>العقار يُنشأ بحالة <code>pending</code> ويحتاج موافقة الإدارة</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>المعامل</th>
+                                    <th>النوع</th>
+                                    <th>مطلوب</th>
+                                    <th>الوصف</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">title</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>عنوان العقار (255 حرف كحد أقصى)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">description</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>وصف العقار (5000 حرف كحد أقصى)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">price</span></td>
+                                    <td>numeric</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>السعر (يجب أن يكون أكبر من صفر)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">type</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>النوع: sale أو rent</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">property_type</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>نوع العقار</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">area</span></td>
+                                    <td>numeric</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>المساحة (بالمتر المربع، يجب أن تكون أكبر من صفر)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">region_id</span></td>
+                                    <td>integer</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>معرف المنطقة</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">location</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>الموقع النصي</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">latitude</span></td>
+                                    <td>float</td>
+                                    <td><span class="param-optional">لا</span></td>
+                                    <td>خط العرض (-90 إلى 90)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">longitude</span></td>
+                                    <td>float</td>
+                                    <td><span class="param-optional">لا</span></td>
+                                    <td>خط الطول (-180 إلى 180)</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">images[]</span></td>
+                                    <td>file</td>
+                                    <td><span class="param-optional">لا</span></td>
+                                    <td>صور العقار (10 صور كحد أقصى، كل صورة 2MB)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">مثال على الطلب</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"title"</span>: <span class="json-string">"شقة فاخرة 3 غرف"</span>,
+  <span class="json-key">"description"</span>: <span class="json-string">"شقة جديدة طابق رابع، جديدة لم تسكن، قرب الخدمات"</span>,
+  <span class="json-key">"price"</span>: <span class="json-number">50000000</span>,
+  <span class="json-key">"type"</span>: <span class="json-string">"sale"</span>,
+  <span class="json-key">"property_type"</span>: <span class="json-string">"apartment"</span>,
+  <span class="json-key">"area"</span>: <span class="json-number">150</span>,
+  <span class="json-key">"region_id"</span>: <span class="json-number">1</span>,
+  <span class="json-key">"location"</span>: <span class="json-string">"المزة - دمشق"</span>,
+  <span class="json-key">"latitude"</span>: <span class="json-number">33.5138</span>,
+  <span class="json-key">"longitude"</span>: <span class="json-number">36.2765</span>
+}</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="tabs">
+                            <button class="tab active" onclick="showTab(this, 'prop-create-success')">استجابة ناجحة</button>
+                            <button class="tab" onclick="showTab(this, 'prop-create-error-403')">403 - غير مصرح</button>
+                            <button class="tab" onclick="showTab(this, 'prop-create-error-422')">422 - خطأ</button>
+                        </div>
+                        
+                        <div id="prop-create-success" class="tab-content active">
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-title">201 Created - تم إنشاء العقار</span>
+                                    <span class="code-lang">JSON</span>
+                                </div>
+                                <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: {
+    <span class="json-key">"id"</span>: <span class="json-number">5</span>,
+    <span class="json-key">"owner_id"</span>: <span class="json-number">2</span>,
+    <span class="json-key">"title"</span>: <span class="json-string">"شقة فاخرة 3 غرف"</span>,
+    <span class="json-key">"description"</span>: <span class="json-string">"شقة جديدة طابق رابع..."</span>,
+    <span class="json-key">"price"</span>: <span class="json-number">50000000</span>,
+    <span class="json-key">"type"</span>: <span class="json-string">"sale"</span>,
+    <span class="json-key">"property_type"</span>: <span class="json-string">"apartment"</span>,
+    <span class="json-key">"area"</span>: <span class="json-number">150</span>,
+    <span class="json-key">"status"</span>: <span class="json-string">"pending"</span>,
+    <span class="json-key">"created_at"</span>: <span class="json-string">"2024-01-15T12:00:00"</span>
+  }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="prop-create-error-403" class="tab-content">
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-title">403 Forbidden - غير مصرح</span>
+                                    <span class="code-lang">JSON</span>
+                                </div>
+                                <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">false</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"غير مصرح لك بإنشاء عقار"</span>
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="prop-create-error-422" class="tab-content">
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-title">422 Validation Error - تجاوز الحد</span>
+                                    <span class="code-lang">JSON</span>
+                                </div>
+                                <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">false</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"لقد وصلت للحد الأقصى من العقارات المسموحة للمكاتب العقارية (400 عقار)"</span>
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Update Property -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-put">PUT</span>
+                        <span class="endpoint-path">/properties/{id}</span>
+                        <span class="endpoint-auth required">Owner/Admin</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="info-box warning">
+                            <div class="info-icon">⚠️</div>
+                            <div>عند تحديث العقار، يُعاد إلى حالة <code>pending</code> ويتطلب موافقة جديدة.</div>
+                        </div>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - تم تحديث العقار</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: {
+    <span class="json-key">"id"</span>: <span class="json-number">5</span>,
+    <span class="json-key">"title"</span>: <span class="json-string">"عنوان محدث"</span>,
+    <span class="json-key">"price"</span>: <span class="json-number">55000000</span>,
+    <span class="json-key">"status"</span>: <span class="json-string">"pending"</span>
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Delete Property -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-delete">DELETE</span>
+                        <span class="endpoint-path">/properties/{id}</span>
+                        <span class="endpoint-auth required">Owner/Admin</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - تم حذف العقار</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تم حذف العقار بنجاح"</span>
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mark as Sold -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/properties/{id}/sold</span>
+                        <span class="endpoint-auth required">Owner فقط</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="info-box info">
+                            <div class="info-icon">ℹ️</div>
+                            <div>يمكن فقط تغيير الحالة إلى <code>sold</code> إذا كان العقار في حالة <code>active</code>.</div>
+                        </div>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - تم تعليم العقار كمباع</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تم تعليم العقار كمباع"</span>
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mark as Rented -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/properties/{id}/rented</span>
+                        <span class="endpoint-auth required">Owner فقط</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - تم تعليم العقار كمؤجر</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تم تعليم العقار كمؤجر"</span>
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- Contact Requests -->
+        <section class="section" id="contacts">
+            <div class="section-header">
+                <h2><span class="section-number">4</span> طلبات التواصل (Contact Requests)</h2>
+            </div>
+            <div class="section-content">
+                
+                <!-- Send Contact Request -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/contact</span>
+                        <span class="endpoint-auth required">مطلوب</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="info-box warning">
+                            <div class="info-icon">⚠️</div>
+                            <div>
+                                <strong>القيود:</strong>
+                                <ul style="margin-top: 0.5rem;">
+                                    <li>لا يمكن لمالك العقار إرسال طلب تواصل لعقاره</li>
+                                    <li>لا يمكن إرسال طلب متكرر لنفس العقار</li>
+                                    <li>الرسالة محدودة بـ 1000 حرف</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>المعامل</th>
+                                    <th>النوع</th>
+                                    <th>مطلوب</th>
+                                    <th>الوصف</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">property_id</span></td>
+                                    <td>integer</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>معرف العقار</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">name</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>اسم مقدم الطلب</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">phone</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>رقم الهاتف</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">message</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-optional">لا</span></td>
+                                    <td>الرسالة (1000 حرف كحد أقصى)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">مثال على الطلب</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"property_id"</span>: <span class="json-number">1</span>,
+  <span class="json-key">"name"</span>: <span class="json-string">"محمد أحمد"</span>,
+  <span class="json-key">"phone"</span>: <span class="json-string">"+963944123456"</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"أريد معرفة المزيد عن هذا العقار"</span>
+}</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="tabs">
+                            <button class="tab active" onclick="showTab(this, 'contact-success')">استجابة ناجحة</button>
+                            <button class="tab" onclick="showTab(this, 'contact-error')">استجابة خطأ</button>
+                        </div>
+                        
+                        <div id="contact-success" class="tab-content active">
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-title">201 Created - تم إنشاء الطلب</span>
+                                    <span class="code-lang">JSON</span>
+                                </div>
+                                <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: {
+    <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+    <span class="json-key">"property_id"</span>: <span class="json-number">1</span>,
+    <span class="json-key">"status"</span>: <span class="json-string">"pending"</span>,
+    <span class="json-key">"message"</span>: <span class="json-string">"أريد معرفة المزيد عن هذا العقار"</span>,
+    <span class="json-key">"created_at"</span>: <span class="json-string">"2024-01-15T12:00:00"</span>
+  }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="contact-error" class="tab-content">
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-title">400 Bad Request - خطأ</span>
+                                    <span class="code-lang">JSON</span>
+                                </div>
+                                <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">false</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"لديك طلب تواصل سابق لهذا العقار"</span>
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Get My Requests -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/contact/my-requests</span>
+                        <span class="endpoint-auth required">مطلوب</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - طلباتي (ContactResource)</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: [
+    {
+      <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+      <span class="json-key">"property_id"</span>: <span class="json-number">1</span>,
+      <span class="json-key">"status"</span>: <span class="json-string">"pending"</span>,
+      <span class="json-key">"message"</span>: <span class="json-string">"أريد معرفة المزيد"</span>,
+      <span class="json-key">"created_at"</span>: <span class="json-string">"2024-01-15T12:00:00"</span>,
+      <span class="json-key">"property"</span>: {
+        <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+        <span class="json-key">"title"</span>: <span class="json-string">"شقة فاخرة"</span>,
+        <span class="json-key">"price"</span>: <span class="json-number">50000000</span>,
+        <span class="json-key">"location"</span>: <span class="json-string">"المزة"</span>
+      }
+    }
+  ]
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- Notifications -->
+        <section class="section" id="notifications">
+            <div class="section-header">
+                <h2><span class="section-number">5</span> الإشعارات (Notifications)</h2>
+            </div>
+            <div class="section-content">
+                
+                <!-- List Notifications -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/notifications</span>
+                        <span class="endpoint-auth required">مطلوب</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - قائمة الإشعارات (NotificationResource)</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: [
+    {
+      <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+      <span class="json-key">"type"</span>: <span class="json-string">"property_approved"</span>,
+      <span class="json-key">"title"</span>: <span class="json-string">"تم قبول عقارك"</span>,
+      <span class="json-key">"body"</span>: <span class="json-string">"تم قبول عقار 'شقة في المزة' ونشره على الموقع."</span>,
+      <span class="json-key">"is_read"</span>: <span class="json-boolean">false</span>,
+      <span class="json-key">"related_id"</span>: <span class="json-number">1</span>,
+      <span class="json-key">"related_type"</span>: <span class="json-string">"property"</span>,
+      <span class="json-key">"created_at"</span>: <span class="json-string">"منذ ساعتين"</span>,
+      <span class="json-key">"created_at_raw"</span>: <span class="json-string">"2024-01-15T10:00:00"</span>
+    }
+  ],
+  <span class="json-key">"meta"</span>: {
+    <span class="json-key">"current_page"</span>: <span class="json-number">1</span>,
+    <span class="json-key">"last_page"</span>: <span class="json-number">1</span>,
+    <span class="json-key">"per_page"</span>: <span class="json-number">20</span>,
+    <span class="json-key">"total"</span>: <span class="json-number">5</span>
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Unread Count -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/notifications/unread-count</span>
+                        <span class="endpoint-auth required">مطلوب</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"count"</span>: <span class="json-number">3</span>
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mark as Read -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/notifications/{id}/read</span>
+                        <span class="endpoint-auth required">مطلوب</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تم تحديد الإشعار كمقروء"</span>
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mark All as Read -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/notifications/read-all</span>
+                        <span class="endpoint-auth required">مطلوب</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تم تحديد جميع الإشعارات كمقروءة"</span>
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Delete Notification -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-delete">DELETE</span>
+                        <span class="endpoint-path">/notifications/{id}</span>
+                        <span class="endpoint-auth required">مطلوب</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تم حذف الإشعار"</span>
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Clear All -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-delete">DELETE</span>
+                        <span class="endpoint-path">/notifications</span>
+                        <span class="endpoint-auth required">مطلوب</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تم حذف جميع الإشعارات"</span>
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- FCM -->
+        <section class="section" id="fcm">
+            <div class="section-header">
+                <h2><span class="section-number">6</span> FCM Tokens (Push Notifications)</h2>
+            </div>
+            <div class="section-content">
+                
+                <!-- Save Token -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/fcm/token</span>
+                        <span class="endpoint-auth required">مطلوب</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>المعامل</th>
+                                    <th>النوع</th>
+                                    <th>مطلوب</th>
+                                    <th>الوصف</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">token</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>FCM token من الجهاز</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">device_type</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-optional">لا</span></td>
+                                    <td>نوع الجهاز: android, ios, web</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"Token saved successfully"</span>
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- Admin Users -->
+        <section class="section" id="admin-users">
+            <div class="section-header">
+                <h2><span class="section-number">7</span> إدارة المستخدمين (Admin)</h2>
+            </div>
+            <div class="section-content">
+                
+                <!-- List Users -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/admin/users</span>
+                        <span class="endpoint-auth required">Admin فقط</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>المعامل</th>
+                                    <th>النوع</th>
+                                    <th>الوصف</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">per_page</span></td>
+                                    <td>integer</td>
+                                    <td>عدد النتائج لكل صفحة</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">search</span></td>
+                                    <td>string</td>
+                                    <td>البحث بالاسم/البريد/الهاتف</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">role</span></td>
+                                    <td>string</td>
+                                    <td>فلترة: admin, owner, user</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">is_verified</span></td>
+                                    <td>boolean</td>
+                                    <td>مفعل/غير مفعل</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="param-name">is_banned</span></td>
+                                    <td>boolean</td>
+                                    <td>محظور/غير محظور</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - قائمة المستخدمين (UserResource)</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: [
+    {
+      <span class="json-key">"id"</span>: <span class="json-number">1</span>,
+      <span class="json-key">"name"</span>: <span class="json-string">"أحمد محمد"</span>,
+      <span class="json-key">"email"</span>: <span class="json-string">"ahmed@example.com"</span>,
+      <span class="json-key">"role"</span>: <span class="json-string">"owner"</span>,
+      <span class="json-key">"phone"</span>: <span class="json-string">"+963944123456"</span>,
+      <span class="json-key">"is_active"</span>: <span class="json-boolean">true</span>,
+      <span class="json-key">"is_verified"</span>: <span class="json-boolean">true</span>,
+      <span class="json-key">"is_banned"</span>: <span class="json-boolean">false</span>,
+      <span class="json-key">"created_at"</span>: <span class="json-string">"2024-01-15T10:30:00"</span>
+    }
+  ],
+  <span class="json-key">"meta"</span>: {
+    <span class="json-key">"current_page"</span>: <span class="json-number">1</span>,
+    <span class="json-key">"last_page"</span>: <span class="json-number">3</span>,
+    <span class="json-key">"per_page"</span>: <span class="json-number">15</span>,
+    <span class="json-key">"total"</span>: <span class="json-number">45</span>
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ban User -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/admin/users/{id}/ban</span>
+                        <span class="endpoint-auth required">Admin فقط</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>المعامل</th>
+                                    <th>النوع</th>
+                                    <th>مطلوب</th>
+                                    <th>الوصف</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">reason</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-optional">لا</span></td>
+                                    <td>سبب الحظر</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="tabs">
+                            <button class="tab active" onclick="showTab(this, 'ban-success')">استجابة ناجحة</button>
+                            <button class="tab" onclick="showTab(this, 'ban-error')">400 - محظور مسبقاً</button>
+                        </div>
+                        
+                        <div id="ban-success" class="tab-content active">
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-title">200 OK - تم حظر المستخدم</span>
+                                    <span class="code-lang">JSON</span>
+                                </div>
+                                <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تم حظر المستخدم بنجاح"</span>,
+  <span class="json-key">"data"</span>: {
+    <span class="json-key">"id"</span>: <span class="json-number">2</span>,
+    <span class="json-key">"name"</span>: <span class="json-string">"مستخدم"</span>,
+    <span class="json-key">"is_banned"</span>: <span class="json-boolean">true</span>,
+    <span class="json-key">"is_active"</span>: <span class="json-boolean">false</span>
+  }
+}</pre>
+                            </div>
+                        </div>
+                        
+                        <div id="ban-error" class="tab-content">
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-title">400 Bad Request - محظور مسبقاً</span>
+                                    <span class="code-lang">JSON</span>
+                                </div>
+                                <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">false</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"المستخدم محظور مسبقاً"</span>
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Unban User -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/admin/users/{id}/unban</span>
+                        <span class="endpoint-auth required">Admin فقط</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - تم إلغاء الحظر</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تم إلغاء حظر المستخدم بنجاح"</span>,
+  <span class="json-key">"data"</span>: {
+    <span class="json-key">"id"</span>: <span class="json-number">2</span>,
+    <span class="json-key">"is_banned"</span>: <span class="json-boolean">false</span>,
+    <span class="json-key">"is_active"</span>: <span class="json-boolean">true</span>
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- Admin Properties -->
+        <section class="section" id="admin-properties">
+            <div class="section-header">
+                <h2><span class="section-number">8</span> إدارة العقارات (Admin)</h2>
+            </div>
+            <div class="section-content">
+                
+                <!-- Approve Property -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/admin/properties/{id}/approve</span>
+                        <span class="endpoint-auth required">Admin فقط</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="info-box info">
+                            <div class="info-icon">ℹ️</div>
+                            <div>قبول العقار وتغيير حالته إلى <code>active</code>. يتم إرسال إشعار لصاحب العقار.</div>
+                        </div>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - تم قبول العقار</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: {
+    <span class="json-key">"id"</span>: <span class="json-number">5</span>,
+    <span class="json-key">"status"</span>: <span class="json-string">"active"</span>,
+    <span class="json-key">"approved_by"</span>: <span class="json-number">1</span>,
+    <span class="json-key">"approved_at"</span>: <span class="json-string">"2024-01-15T12:00:00"</span>
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Reject Property -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-post">POST</span>
+                        <span class="endpoint-path">/admin/properties/{id}/reject</span>
+                        <span class="endpoint-auth required">Admin فقط</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>المعامل</th>
+                                    <th>النوع</th>
+                                    <th>مطلوب</th>
+                                    <th>الوصف</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="param-name">reason</span></td>
+                                    <td>string</td>
+                                    <td><span class="param-required">نعم</span></td>
+                                    <td>سبب الرفض</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - تم رفض العقار</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: {
+    <span class="json-key">"id"</span>: <span class="json-number">5</span>,
+    <span class="json-key">"status"</span>: <span class="json-string">"rejected"</span>,
+    <span class="json-key">"rejection_reason"</span>: <span class="json-string">"المعلومات غير مكتملة"</span>
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- Admin Dashboard -->
+        <section class="section" id="admin-dashboard">
+            <div class="section-header">
+                <h2><span class="section-number">9</span> لوحة التحكم (Admin Dashboard)</h2>
+            </div>
+            <div class="section-content">
+                
+                <!-- Statistics -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/admin/statistics</span>
+                        <span class="endpoint-auth required">Admin فقط</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - الإحصائيات</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: {
+    <span class="json-key">"users"</span>: {
+      <span class="json-key">"total"</span>: <span class="json-number">150</span>,
+      <span class="json-key">"owners"</span>: <span class="json-number">30</span>,
+      <span class="json-key">"unverified"</span>: <span class="json-number">10</span>,
+      <span class="json-key">"banned"</span>: <span class="json-number">2</span>
+    },
+    <span class="json-key">"properties"</span>: {
+      <span class="json-key">"total"</span>: <span class="json-number">500</span>,
+      <span class="json-key">"today"</span>: <span class="json-number">5</span>,
+      <span class="json-key">"active"</span>: <span class="json-number">350</span>,
+      <span class="json-key">"rented"</span>: <span class="json-number">50</span>,
+      <span class="json-key">"sold"</span>: <span class="json-number">30</span>,
+      <span class="json-key">"pending"</span>: <span class="json-number">60</span>,
+      <span class="json-key">"rejected"</span>: <span class="json-number">10</span>
+    },
+    <span class="json-key">"contact_requests"</span>: {
+      <span class="json-key">"total"</span>: <span class="json-number">200</span>,
+      <span class="json-key">"pending"</span>: <span class="json-number">25</span>
+    }
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chart Data -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/admin/dashboard/chart-data</span>
+                        <span class="endpoint-auth required">Admin فقط</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - بيانات الرسوم البيانية (ChartDataResource)</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"message"</span>: <span class="json-string">"تمت العملية بنجاح"</span>,
+  <span class="json-key">"data"</span>: {
+    <span class="json-key">"properties_by_region"</span>: [
+      {
+        <span class="json-key">"region_id"</span>: <span class="json-number">1</span>,
+        <span class="json-key">"region_name"</span>: <span class="json-string">"دمشق"</span>,
+        <span class="json-key">"count"</span>: <span class="json-number">150</span>,
+        <span class="json-key">"percentage"</span>: <span class="json-number">30.0</span>
+      }
+    ],
+    <span class="json-key">"properties_by_type"</span>: [
+      {
+        <span class="json-key">"property_type"</span>: <span class="json-string">"apartment"</span>,
+        <span class="json-key">"label"</span>: <span class="json-string">"شقة"</span>,
+        <span class="json-key">"count"</span>: <span class="json-number">200</span>,
+        <span class="json-key">"percentage"</span>: <span class="json-number">40.0</span>
+      }
+    ],
+    <span class="json-key">"properties_by_status"</span>: [
+      {
+        <span class="json-key">"status"</span>: <span class="json-string">"active"</span>,
+        <span class="json-key">"label"</span>: <span class="json-string">"نشط"</span>,
+        <span class="json-key">"count"</span>: <span class="json-number">350</span>
+      }
+    ],
+    <span class="json-key">"users_by_role"</span>: [
+      {
+        <span class="json-key">"role"</span>: <span class="json-string">"user"</span>,
+        <span class="json-key">"label"</span>: <span class="json-string">"مستخدم"</span>,
+        <span class="json-key">"count"</span>: <span class="json-number">100</span>
+      }
+    ]
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Properties by Region -->
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method method-get">GET</span>
+                        <span class="endpoint-path">/admin/dashboard/properties-by-region</span>
+                        <span class="endpoint-auth required">Admin فقط</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-title">200 OK - (PropertyByRegionResource)</span>
+                                <span class="code-lang">JSON</span>
+                            </div>
+                            <div class="code-content">
+<pre>{
+  <span class="json-key">"success"</span>: <span class="json-boolean">true</span>,
+  <span class="json-key">"data"</span>: [
+    {
+      <span class="json-key">"region_id"</span>: <span class="json-number">1</span>,
+      <span class="json-key">"region_name"</span>: <span class="json-string">"دمشق"</span>,
+      <span class="json-key">"region_type"</span>: <span class="json-string">"governorate"</span>,
+      <span class="json-key">"total_properties"</span>: <span class="json-number">150</span>,
+      <span class="json-key">"active"</span>: <span class="json-number">100</span>,
+      <span class="json-key">"pending"</span>: <span class="json-number">30</span>,
+      <span class="json-key">"rented"</span>: <span class="json-number">10</span>,
+      <span class="json-key">"sold"</span>: <span class="json-number">5</span>,
+      <span class="json-key">"avg_price"</span>: <span class="json-number">75000000</span>
+    }
+  ]
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+        
+        <!-- Error Codes -->
+        <section class="section" id="errors">
+            <div class="section-header">
+                <h2><span class="section-number">📊</span> رموز الاستجابة والأخطاء</h2>
+            </div>
+            <div class="section-content">
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>الرمز</th>
+                            <th>الاسم</th>
+                            <th>الوصف</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>200</strong></td>
+                            <td>OK</td>
+                            <td>نجاح الطلب</td>
+                        </tr>
+                        <tr>
+                            <td><strong>201</strong></td>
+                            <td>Created</td>
+                            <td>تم إنشاء المورد بنجاح</td>
+                        </tr>
+                        <tr>
+                            <td><strong>400</strong></td>
+                            <td>Bad Request</td>
+                            <td>طلب سيئ أو خطأ في البيانات</td>
+                        </tr>
+                        <tr>
+                            <td><strong>401</strong></td>
+                            <td>Unauthorized</td>
+                            <td>غير مصرح - Token غير صالح أو منتهي</td>
+                        </tr>
+                        <tr>
+                            <td><strong>403</strong></td>
+                            <td>Forbidden</td>
+                            <td>ممنوع - ليس لديك صلاحية</td>
+                        </tr>
+                        <tr>
+                            <td><strong>404</strong></td>
+                            <td>Not Found</td>
+                            <td>المورد غير موجود</td>
+                        </tr>
+                        <tr>
+                            <td><strong>422</strong></td>
+                            <td>Validation Error</td>
+                            <td>خطأ في التحقق من البيانات</td>
+                        </tr>
+                        <tr>
+                            <td><strong>429</strong></td>
+                            <td>Too Many Requests</td>
+                            <td>تجاوز الحد المسموح من الطلبات</td>
+                        </tr>
+                        <tr>
+                            <td><strong>500</strong></td>
+                            <td>Server Error</td>
+                            <td>خطأ في الخادم</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3 style="margin-top: 2rem; color: var(--primary);">Rate Limiting</h3>
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>الحد</th>
+                            <th>الوصف</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/auth/login</code></td>
+                            <td>5 محاولات / 5 دقائق</td>
+                            <td>لكل بريد إلكتروني</td>
+                        </tr>
+                        <tr>
+                            <td><code>/auth/register</code></td>
+                            <td>3 محاولات / 10 دقائق</td>
+                            <td>لكل IP</td>
+                        </tr>
+                        <tr>
+                            <td>باقي الـ APIs</td>
+                            <td>60 طلب / دقيقة</td>
+                            <td>لكل IP</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- Notification Types -->
+        <section class="section" id="notification-types">
+            <div class="section-header">
+                <h2><span class="section-number">🔔</span> أنواع الإشعارات</h2>
+            </div>
+            <div class="section-content">
+                <table class="params-table">
+                    <thead>
+                        <tr>
+                            <th>النوع</th>
+                            <th>العنوان</th>
+                            <th>المستلم</th>
+                            <th>الحدث</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>property_approved</code></td>
+                            <td>تم قبول عقارك</td>
+                            <td>Owner</td>
+                            <td>موافقة العقار</td>
+                        </tr>
+                        <tr>
+                            <td><code>property_rejected</code></td>
+                            <td>تم رفض عقارك</td>
+                            <td>Owner</td>
+                            <td>رفض العقار</td>
+                        </tr>
+                        <tr>
+                            <td><code>property_sold</code></td>
+                            <td>تم بيع عقارك</td>
+                            <td>Owner</td>
+                            <td>تحديد كمباع</td>
+                        </tr>
+                        <tr>
+                            <td><code>property_rented</code></td>
+                            <td>تم تأجير عقارك</td>
+                            <td>Owner</td>
+                            <td>تحديد كمؤجر</td>
+                        </tr>
+                        <tr>
+                            <td><code>new_contact_request</code></td>
+                            <td>طلب تواصل جديد</td>
+                            <td>Admin</td>
+                            <td>إنشاء طلب تواصل</td>
+                        </tr>
+                        <tr>
+                            <td><code>contact_request_approved</code></td>
+                            <td>تم قبول طلب التواصل</td>
+                            <td>User</td>
+                            <td>قبول الطلب</td>
+                        </tr>
+                        <tr>
+                            <td><code>contact_request_rejected</code></td>
+                            <td>تم رفض طلب التواصل</td>
+                            <td>User</td>
+                            <td>رفض الطلب</td>
+                        </tr>
+                        <tr>
+                            <td><code>account_verified</code></td>
+                            <td>تم التحقق من حسابك</td>
+                            <td>User</td>
+                            <td>التحقق من الحساب</td>
+                        </tr>
+                        <tr>
+                            <td><code>account_banned</code></td>
+                            <td>تم حظر حسابك</td>
+                            <td>User</td>
+                            <td>حظر الحساب</td>
+                        </tr>
+                        <tr>
+                            <td><code>account_unbanned</code></td>
+                            <td>تم إلغاء حظر حسابك</td>
+                            <td>User</td>
+                            <td>إلغاء الحظر</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+    </div>
+    
+    <footer class="footer">
+        <p>AlMiftah API Documentation - الإصدار 1.0.0</p>
+        <p>© 2024 AlMiftah Real Estate System</p>
+    </footer>
+    
+    <script>
+        function showTab(button, tabId) {
+            // Remove active class from all tabs and contents
+            const parent = button.closest('.endpoint-body');
+            parent.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            // Add active class to clicked tab and its content
+            button.classList.add('active');
+            parent.querySelector('#' + tabId).classList.add('active');
+        }
+        
+        // Smooth scroll for navigation
+        document.querySelectorAll('.nav-list a, .toc-list a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

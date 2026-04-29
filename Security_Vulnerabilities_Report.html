@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقرير الثغرات الأمنية - AlMiftah</title>
+    <style>
+        :root {
+            --primary: #dc2626;
+            --primary-dark: #b91c1c;
+            --success: #059669;
+            --warning: #d97706;
+            --bg-dark: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-critical: #fef2f2;
+            --bg-high: #fffbeb;
+            --bg-medium: #eff6ff;
+            --bg-low: #f0fdf4;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 3px solid var(--border);
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+            border-radius: 1rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .header .warning-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+
+        .badge-critical {
+            background: #fee2e2;
+            color: var(--primary);
+        }
+
+        .badge-high {
+            background: #fef3c7;
+            color: var(--warning);
+        }
+
+        .badge-medium {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .badge-low {
+            background: #dcfce7;
+            color: var(--success);
+        }
+
+        .section {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--bg-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .vulnerability-card {
+            background: var(--bg-dark);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-right: 4px solid;
+        }
+
+        .vulnerability-card.critical {
+            border-color: var(--primary);
+            background: var(--bg-critical);
+        }
+
+        .vulnerability-card.high {
+            border-color: var(--warning);
+            background: var(--bg-high);
+        }
+
+        .vulnerability-card.medium {
+            border-color: #2563eb;
+            background: var(--bg-medium);
+        }
+
+        .vulnerability-card.low {
+            border-color: var(--success);
+            background: var(--bg-low);
+        }
+
+        .vuln-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .vuln-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .vuln-location {
+            font-family: 'Courier New', monospace;
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.85rem;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .vuln-section {
+            margin: 1rem 0;
+        }
+
+        .vuln-section h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .vuln-section p,
+        .vuln-section li {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .code-block {
+            background: #1e293b;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: #e2e8f0;
+        }
+
+        .fix-box {
+            background: #dcfce7;
+            border: 1px solid #86efac;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .fix-box h4 {
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .fix-box code {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .stat-card .label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .stat-card.critical .number { color: var(--primary); }
+        .stat-card.high .number { color: var(--warning); }
+        .stat-card.medium .number { color: #2563eb; }
+        .stat-card.low .number { color: var(--success); }
+
+        .toc {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .toc h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0;
+            transition: color 0.3s;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            border-top: 2px solid var(--border);
+            margin-top: 3rem;
+            background: var(--bg-card);
+            border-radius: 1rem;
+        }
+
+        .disclaimer {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .disclaimer h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="warning-icon">⚠️</div>
+            <h1>تقرير الثغرات الأمنية</h1>
+            <p class="subtitle">تقرير شامل لجميع الثغرات المكتشفة في نظام AlMiftah</p>
+            <div>
+                <span class="badge badge-critical">Critical: 2</span>
+                <span class="badge badge-high">High: 5</span>
+                <span class="badge badge-medium">Medium: 4</span>
+                <span class="badge badge-low">Low: 3</span>
+            </div>
+        </header>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <h4>⚠️ إخلاء المسؤولية</h4>
+            <p>هذا التقرير للأغراض الأمنية فقط. يرجى معالجة هذه الثغرات فوراً لضمان أمان النظام.</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card critical">
+                <div class="number">2</div>
+                <div class="label">حرجة - تحتاج معالجة فورية</div>
+            </div>
+            <div class="stat-card high">
+                <div class="number">5</div>
+                <div class="label">عالية - معالجة عاجلة</div>
+            </div>
+            <div class="stat-card medium">
+                <div class="number">4</div>
+                <div class="label">متوسطة - معالجة مطلوبة</div>
+            </div>
+            <div class="stat-card low">
+                <div class="number">3</div>
+                <div class="label">منخفضة - تحسين أمني</div>
+            </div>
+        </div>
+
+        <!-- Table of Contents -->
+        <nav class="toc">
+            <h3>📋 جدول المحتويات</h3>
+            <ul>
+                <li><a href="#critical">🔴 ثغرات حرجة</a></li>
+                <li><a href="#high">🟠 ثغرات عالية</a></li>
+                <li><a href="#medium">🔵 ثغرات متوسطة</a></li>
+                <li><a href="#low">🟢 ثغرات منخفضة</a></li>
+                <li><a href="#recommendations">💡 التوصيات العامة</a></li>
+            </ul>
+        </nav>
+
+        <!-- Critical Vulnerabilities -->
+        <section id="critical" class="section">
+            <h2 class="section-title">🔴 ثغرات حرجة (Critical)</h2>
+
+            <!-- Vulnerability 1 -->
+            <div class="vulnerability-card critical">
+                <div class="vuln-header">
+                    <span class="vuln-title">1. كشف رسائل الأخطاء التفصيلية (Debug Mode)</span>
+                    <span class="badge badge-critical">حرجة</span>
+                </div>
+                <div class="vuln-location">config/app.php:42 | .env</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>وضع Debug مفعل في بيئة الإنتاج، مما يكشف رسائل الأخطاء التفصيلية stack traces للمستخدمين. هذا يسمح للمهاجمين برؤية هيكل التطبيق الداخلي.</p>
+                </div>
+
+                <div class="vuln-section">
+                    <h4>المخاطر:</h4>
+                    <ul>
+                        <li>كشف مسارات الملفات الداخلية</li>
+                        <li>كشف إصدارات المكتبات المستخدمة</li>
+                        <li>كشف استعلامات قاعدة البيانات</li>
+                        <li>تسهيل هجمات SQL Injection</li>
+                        <li>تسهيل هجمات XSS</li>
+                    </ul>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <p>في ملف <code>.env</code>:</p>
+                    <div class="code-block">
+                        <pre>APP_DEBUG=false
+APP_ENV=production</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 2 -->
+            <div class="vulnerability-card critical">
+                <div class="vuln-header">
+                    <span class="vuln-title">2. عدم وجود Rate Limiting على تسجيل الدخول</span>
+                    <span class="badge badge-critical">حرجة</span>
+                </div>
+                <div class="vuln-location">routes/api.php | AuthController.php</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>لا توجد قيود على عدد محاولات تسجيل الدخول. هذا يسمح للمهاجمين بمحاولات لا نهائية لتخمين كلمات المرور (Brute Force Attack).</p>
+                </div>
+
+                <div class="vuln-section">
+                    <h4>المخاطر:</h4>
+                    <ul>
+                        <li>هجمات Brute Force لتخمين كلمات المرور</li>
+                        <li>هجمات Credential Stuffing</li>
+                        <li>إ锁 حساب المستخدمين</li>
+                        <li>استنزاف موارد الخادم</li>
+                    </ul>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <p>أضف Rate Limiting في <code>routes/api.php</code>:</p>
+                    <div class="code-block">
+                        <pre>use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+
+RateLimiter::for('login', function (Request $request) {
+    return Limit::perMinutes(5, 5)->by($request->ip());
+});
+
+Route::post('/auth/login', [AuthController::class, 'login'])
+    ->middleware('throttle:login');</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- High Vulnerabilities -->
+        <section id="high" class="section">
+            <h2 class="section-title">🟠 ثغرات عالية (High)</h2>
+
+            <!-- Vulnerability 3 -->
+            <div class="vulnerability-card high">
+                <div class="vuln-header">
+                    <span class="vuln-title">3. كشف معلومات المستخدم في UserResource</span>
+                    <span class="badge badge-high">عالية</span>
+                </div>
+                <div class="vuln-location">app/Http/Resources/UserResource.php</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>Resource المستخدم يرجع بيانات حساسة مثل <code>is_banned</code> و <code>ban_reason</code> و <code>banned_at</code> لجميع المستخدمين. هذه المعلومات لا يجب أن تكون متاحة.</p>
+                </div>
+
+                <div class="vuln-section">
+                    <h4>المخاطر:</h4>
+                    <ul>
+                        <li>كشف حالة الحظر للمستخدمين</li>
+                        <li>كشف أسباب الحظر</li>
+                        <li>كشف تواريخ الحظر</li>
+                        <li>يمكن استغلالها لشن هجمات على المستخدمين المحظورين</li>
+                    </ul>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <p>عدّل Resource للتحقق من صلاحية المستخدم:</p>
+                    <div class="code-block">
+                        <pre>public function toArray(Request $request): array
+{
+    $data = [
+        'id' => $this->id,
+        'name' => $this->name,
+        'email' => $this->email,
+        'phone' => $this->when(
+            $request->user()?->isAdmin(), 
+            $this->phone
+        ),
+        'role' => $this->role,
+        'is_active' => $this->is_active,
+        'email_verified_at' => $this->email_verified_at 
+            ? $this->email_verified_at->toDateTimeString() 
+            : null,
+        'created_at' => $this->created_at->toDateTimeString(),
+    ];
+
+    // أضف حقول الحظر فقط للأدمن
+    if ($request->user()?->isAdmin()) {
+        $data['is_banned'] = $this->is_banned;
+        $data['ban_reason'] = $this->when($this->is_banned, $this->ban_reason);
+        $data['banned_at'] = $this->when($this->is_banned, 
+            $this->banned_at?->toDateTimeString()
+        );
+    }
+
+    return $data;
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 4 -->
+            <div class="vulnerability-card high">
+                <div class="vuln-header">
+                    <span class="vuln-title">4. عدم التحقق من حالة حساب المستخدم في API</span>
+                    <span class="badge badge-high">عالية</span>
+                </div>
+                <div class="vuln-location">bootstrap/app.php</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>المصادقة بـ Sanctum لا تتحقق تلقائياً من حالة <code>is_active</code> أو <code>is_banned</code>. المستخدم المحظور أو المعطل يمكنه استخدام Token القديم.</p>
+                </div>
+
+                <div class="vuln-section">
+                    <h4>المخاطر:</h4>
+                    <ul>
+                        <li>المستخدم المحظور يمكنه استخدام النظام</li>
+                        <li>المستخدم المعطل يمكنه استخدام النظام</li>
+                        <li>لا يوجد فصل تلقائي للجلسة</li>
+                    </ul>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <p>أضف Middleware للتحقق من حالة الحساب:</p>
+                    <div class="code-block">
+                        <pre>// app/Http/Middleware/CheckUserStatus.php
+public function handle(Request $request, Closure $next)
+{
+    $user = $request->user();
+    
+    if (!$user || !$user->is_active) {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json([
+            'success' => false,
+            'message' => 'الحساب غير نشط'
+        ], 403);
+    }
+    
+    if ($user->is_banned) {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json([
+            'success' => false,
+            'message' => 'الحساب محظور'
+        ], 403);
+    }
+    
+    return $next($request);
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 5 -->
+            <div class="vulnerability-card high">
+                <div class="vuln-header">
+                    <span class="vuln-title">5. عدم وجود Rate Limiting على API العام</span>
+                    <span class="badge badge-high">عالية</span>
+                </div>
+                <div class="vuln-location">routes/api.php</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>جميع واجهات API العامة (العقارات، المناطق، البحث) لا تحتوي على Rate Limiting. هذا يسمح بهجمات DoS و scraping.</p>
+                </div>
+
+                <div class="vuln-section">
+                    <h4>المخاطر:</h4>
+                    <ul>
+                        <li>هجمات DoS/DDoS</li>
+                        <li>استخراج جميع البيانات (Data Scraping)</li>
+                        <li>استنزاف موارد الخادم</li>
+                        <li>تكلفة عالية على الاستضافة السحابية</li>
+                    </ul>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <p>أضف Rate Limiting عام:</p>
+                    <div class="code-block">
+                        <pre>RateLimiter::for('api', function (Request $request) {
+    return Limit::perMinute(60)->by($request->ip());
+});
+
+// في routes/api.php
+Route::middleware('throttle:api')->group(function () {
+    // الواجهات العامة
+});</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 6 -->
+            <div class="vulnerability-card high">
+                <div class="vuln-header">
+                    <span class="vuln-title">6. عدم تنظيف Base64 Images</span>
+                    <span class="badge badge-high">عالية</span>
+                </div>
+                <div class="vuln-location">app/Services/PropertyService.php:142-166</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>دالة <code>addImagesFromBase64</code> تقبل Base64 بدون تحقق كافٍ. يمكن رفع ملفات ضارة.</p>
+                </div>
+
+                <div class="vuln-section">
+                    <h4>المخاطر:</h4>
+                    <ul>
+                        <li>رفع ملفات ضارة (Web Shell)</li>
+                        <li>رفع ملفات كبيرة جداً</li>
+                        <li>التحايل على قيود نوع الملف</li>
+                    </ul>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>public function addImagesFromBase64(Property $property, array $base64Images): void
+{
+    $existingCount = $property->images()->count();
+    $maxSize = 2 * 1024 * 1024; // 2MB
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    
+    foreach ($base64Images as $base64) {
+        if (!$base64) continue;
+        
+        // استخراج نوع الملف
+        if (preg_match('/^data:image\/(\w+);base64,/', $base64, $typeMatch)) {
+            $imageType = 'image/' . $typeMatch[1];
+            $base64Data = preg_replace('/^data:image\/\w+;base64,/', '', $base64);
+        } else {
+            continue; // صيغة غير صالحة
+        }
+        
+        // التحقق من نوع الملف
+        if (!in_array($imageType, $allowedTypes)) {
+            continue;
+        }
+        
+        $imageData = base64_decode($base64Data);
+        
+        // التحقق من حجم الملف
+        if (strlen($imageData) > $maxSize) {
+            continue;
+        }
+        
+        // التحقق من MIME type الفعلي
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        $actualMime = $finfo->buffer($imageData);
+        
+        if (!in_array($actualMime, $allowedTypes)) {
+            continue;
+        }
+        
+        $filename = time() . '_' . uniqid() . '.jpg';
+        $path = 'properties/' . $property->id . '/' . $filename;
+        
+        \Illuminate\Support\Facades\Storage::disk('public')->put($path, $imageData);
+        
+        PropertyImage::create([
+            'property_id' => $property->id,
+            'image_path' => $path,
+            'is_primary' => $existingCount === 0,
+        ]);
+        
+        $existingCount++;
+    }
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 7 -->
+            <div class="vulnerability-card high">
+                <div class="vuln-header">
+                    <span class="vuln-title">7. عدم وجود تحكم في الوصول CORS</span>
+                    <span class="badge badge-high">عالية</span>
+                </div>
+                <div class="vuln-location">bootstrap/app.php</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>لا يوجد ملف cors.php أو إعدادات CORS. هذا يسمح لأي موقع باستدعاء API.</p>
+                </div>
+
+                <div class="vuln-section">
+                    <h4>المخاطر:</h4>
+                    <ul>
+                        <li>هجمات CSRF</li>
+                        <li>استخدام API من مواقع ضارة</li>
+                        <li>سرقة بيانات المستخدمين</li>
+                        <li>الربط بنطاقات غير مصرح بها</li>
+                    </ul>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <p>أنشئ <code>config/cors.php</code>:</p>
+                    <div class="code-block">
+                        <pre>return [
+    'paths' => ['api/*'],
+    'allowed_methods' => ['*'],
+    'allowed_origins' => [
+        'https://yourdomain.com',
+        'https://www.yourdomain.com',
+    ],
+    'allowed_origins_patterns' => [],
+    'allowed_headers' => ['*'],
+    'exposed_headers' => [],
+    'max_age' => 0,
+    'supports_credentials' => false,
+];</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Medium Vulnerabilities -->
+        <section id="medium" class="section">
+            <h2 class="section-title">🔵 ثغرات متوسطة (Medium)</h2>
+
+            <!-- Vulnerability 8 -->
+            <div class="vulnerability-card medium">
+                <div class="vuln-header">
+                    <span class="vuln-title">8. عدم التحقق من كلمة المرور القوية</span>
+                    <span class="badge badge-medium">متوسطة</span>
+                </div>
+                <div class="vuln-location">app/Http/Requests/AuthRequest.php:22</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>التحقق من كلمة المرور يسمح بـ 8 أحرف فقط دون تحقق من التعقيد. كلمات مرور ضعيفة مثل "12345678" مقبولة.</p>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>'password' => [
+    'required',
+    'string',
+    'min:8',
+    'confirmed',
+    'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/',
+],</pre>
+                    </div>
+                    <p style="margin-top: 0.5rem; color: var(--text-secondary);">يجب أن تحتوي على: حرف كبير، حرف صغير، رقم، و رمز خاص.</p>
+                </div>
+            </div>
+
+            <!-- Vulnerability 9 -->
+            <div class="vulnerability-card medium">
+                <div class="vuln-header">
+                    <span class="vuln-title">9. عدم وجود تحقق من رقم الهاتف</span>
+                    <span class="badge badge-medium">متوسطة</span>
+                </div>
+                <div class="vuln-location">app/Http/Requests/AuthRequest.php:23</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>رقم الهاتف لا يتحقق من الصيغة أو الطول. يمكن إدخال أرقام وهمية أو طويلة جداً.</p>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>'phone' => [
+    'required',
+    'string',
+    'regex:/^(\+?966|0)?5\d{8}$/', // صيغة سعودية
+    'unique:users',
+],</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 10 -->
+            <div class="vulnerability-card medium">
+                <div class="vuln-header">
+                    <span class="vuln-title">10. كشف رابط التحقق في Email Verification Token</span>
+                    <span class="badge badge-medium">متوسطة</span>
+                </div>
+                <div class="vuln-location">app/Http/Controllers/AuthController.php:307-318</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>رمز التحقق يتم إنشاؤه باستخدام base64 encoding بدون تشفير أو توقيع. يمكن للمهاجم إنشاء روابط تحقق مزيفة.</p>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <p>استخدم Laravel's signed URLs:</p>
+                    <div class="code-block">
+                        <pre>use Illuminate\Support\Facades\URL;
+
+// عند إنشاء الرابط
+$verificationUrl = URL::signedRoute('verify.email', [
+    'email' => $user->email,
+]);
+
+// عند التحقق
+if (!$request->hasValidSignature()) {
+    return $this->errorResponse('رابط التحقق غير صالح', 400);
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 11 -->
+            <div class="vulnerability-card medium">
+                <div class="vuln-header">
+                    <span class="vuln-title">11. عدم وجود فلترة للبحث</span>
+                    <span class="badge badge-medium">متوسطة</span>
+                </div>
+                <div class="vuln-location">app/Services/PropertyService.php:53-57</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>حقل البحث يستخدم <code>LIKE %%</code> بدون قيود. استعلامات طويلة قد تؤثر على الأداء.</p>
+                </div>
+
+                <div class="vuln-section">
+                    <h4>المخاطر:</h4>
+                    <ul>
+                        <li>هجمات Blind SQL Injection</li>
+                        <li>استهلاك موارد قاعدة البيانات</li>
+                        <li>هجمات ReDoS</li>
+                    </ul>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>if (!empty($filters['search'])) {
+    $search = '%' . substr($filters['search'], 0, 100) . '%';
+    $query->where(function ($q) use ($search) {
+        $q->whereRaw(
+            'SUBSTRING(title, 1, 255) LIKE ?', 
+            [$search]
+        );
+    });
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Low Vulnerabilities -->
+        <section id="low" class="section">
+            <h2 class="section-title">🟢 ثغرات منخفضة (Low)</h2>
+
+            <!-- Vulnerability 12 -->
+            <div class="vulnerability-card low">
+                <div class="vuln-header">
+                    <span class="vuln-title">12. عدم وجود Logout شامل للجلسات</span>
+                    <span class="badge badge-low">منخفضة</span>
+                </div>
+                <div class="vuln-location">app/Services/AuthService.php:65</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>عند تغيير كلمة المرور، يتم حذف جميع الـ Tokens. لكن لا يوجد endpoint للمستخدم لحذف جميع جلساته.</p>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>public function logoutAll(Request $request): JsonResponse
+{
+    $request->user()->tokens()->delete();
+    return response()->json([
+        'success' => true,
+        'message' => 'تم تسجيل الخروج من جميع الجلسات'
+    ]);
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 13 -->
+            <div class="vulnerability-card low">
+                <div class="vuln-header">
+                    <span class="vuln-title">13. عدم وجود Head</span>
+                    <span class="badge badge-low">منخفضة</span>
+                </div>
+                <div class="vuln-location">config/sanctum.php:50</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>صلاحية Tokens لا تنتهي أبداً (<code>expiration: null</code>). هذا يعني أن Token المسروق يظل صالحاً للأبد.</p>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>'expiration' => env('SANCTUM_EXPIRATION', 10080), // 7 أيام بالدقائق</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 14 -->
+            <div class "vulnerability-card low">
+                <div class="vuln-header">
+                    <span class="vuln-title">14. عدم وجود رؤوس أمنية HTTP</span>
+                    <span class="badge badge-low">منخفضة</span>
+                </div>
+                <div class="vuln-location">bootstrap/app.php</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>لا توجد Middleware لإضافة رؤوس أمنية مثل CSP, X-Frame-Options, X-Content-Type-Options.</p>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <p>أنشئ Middleware:</p>
+                    <div class="code-block">
+                        <pre>// app/Http/Middleware/SecurityHeaders.php
+public function handle(Request $request, Closure $next)
+{
+    $response = $next($request);
+    
+    $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
+    $response->headers->set('X-Content-Type-Options', 'nosniff');
+    $response->headers->set('X-XSS-Protection', '1; mode=block');
+    $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
+    
+    return $response;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recommendations -->
+        <section id="recommendations" class="section">
+            <h2 class="section-title">💡 التوصيات العامة</h2>
+
+            <div class="vuln-section">
+                <h4>1. مصادقة ثنائية (2FA)</h4>
+                <p>أضف تحققاً ثنائياً للحسابات الحساسة (الأدمن).</p>
+            </div>
+
+            <div class="vuln-section">
+                <h4>2. تشفير البيانات الحساسة</h4>
+                <p>شفر أرقام الهواتف وغيرها من البيانات الشخصية.</p>
+            </div>
+
+            <div class="vuln-section">
+                <h4>3. سجلات التدقيق (Audit Logs)</h4>
+                <p>سجل جميع العمليات الحساسة (تغيير الأدوار، الحظر، حذف البيانات).</p>
+            </div>
+
+            <div class="vuln-section">
+                <h4>4. النسخ الاحتياطي التلقائي</h4>
+                <p>أعد جدولة نسخ احتياطية منتظمة لقاعدة البيانات.</p>
+            </div>
+
+            <div class="vuln-section">
+                <h4>5. فحص أمني دوري</h4>
+                <p>أجرِ فحصاً أمنياً منتظماً باستخدام أدوات مثل OWASP ZAP.</p>
+            </div>
+
+            <div class="vuln-section">
+                <h4>6. HTTPS فقط</h4>
+                <p>أجبر استخدام HTTPS مع HSTS.</p>
+            </div>
+
+            <div class="vuln-section">
+                <h4>7. حماية من Brute Force</h4>
+                <p>أضف حماية إضافية لتسجيل الدخول مع IP blocking.</p>
+            </div>
+
+            <div class="vuln-section">
+                <h4>8. التحقق من البريد الإلكتروني</h4>
+                <p>أضف تحققاً إلزامياً من البريد الإلكتروني قبل السماح باستخدام الحساب.</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>تقرير الثغرات الأمنية - AlMiftah Real Estate</p>
+            <p>تاريخ التقرير: 2024</p>
+            <p style="margin-top: 1rem; color: var(--primary);">
+                ⚠️ هذا تقرير سري - لا تشاركه مع أطراف غير مخولة
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

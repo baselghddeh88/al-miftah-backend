@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقرير ثغرات المنطق والسياق - AlMiftah</title>
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #5b21b6;
+            --success: #059669;
+            --warning: #d97706;
+            --bg-dark: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-critical: #faf5ff;
+            --bg-high: #fefce8;
+            --bg-medium: #eff6ff;
+            --bg-low: #f0fdf4;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.9;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            padding: 3rem 0;
+            border-bottom: 3px solid var(--border);
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
+            border-radius: 1rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .header .warning-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+
+        .badge-critical {
+            background: #f3e8ff;
+            color: var(--primary);
+        }
+
+        .badge-high {
+            background: #fef9c3;
+            color: #a16207;
+        }
+
+        .badge-medium {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .badge-low {
+            background: #dcfce7;
+            color: var(--success);
+        }
+
+        .section {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--bg-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .vulnerability-card {
+            background: var(--bg-dark);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-right: 4px solid;
+        }
+
+        .vulnerability-card.critical {
+            border-color: var(--primary);
+            background: var(--bg-critical);
+        }
+
+        .vulnerability-card.high {
+            border-color: var(--warning);
+            background: var(--bg-high);
+        }
+
+        .vulnerability-card.medium {
+            border-color: #3b82f6;
+            background: var(--bg-medium);
+        }
+
+        .vulnerability-card.low {
+            border-color: var(--success);
+            background: var(--bg-low);
+        }
+
+        .vuln-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .vuln-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .vuln-location {
+            font-family: 'Courier New', monospace;
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.85rem;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .vuln-section {
+            margin: 1rem 0;
+        }
+
+        .vuln-section h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .vuln-section p,
+        .vuln-section li {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .flow-diagram {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            direction: ltr;
+            text-align: center;
+        }
+
+        .flow-diagram .step {
+            display: inline-block;
+            background: #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin: 0.25rem;
+            font-size: 0.85rem;
+        }
+
+        .flow-diagram .arrow {
+            color: var(--primary);
+            margin: 0 0.5rem;
+        }
+
+        .code-block {
+            background: #1e293b;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+            direction: ltr;
+            text-align: left;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: #e2e8f0;
+        }
+
+        .code-block code {
+            background: #334155;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            color: #fbbf24;
+        }
+
+        .fix-box {
+            background: #dcfce7;
+            border: 1px solid #86efac;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .fix-box h4 {
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .fix-box code {
+            background: #1e293b;
+            color: #fbbf24;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .attack-box {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .attack-box h4 {
+            color: #dc2626;
+            margin-bottom: 0.5rem;
+        }
+
+        .toc {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .toc h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0;
+            transition: color 0.3s;
+        }
+
+        .toc a:hover {
+            color: var(--primary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .stat-card .label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .stat-card.critical .number { color: var(--primary); }
+        .stat-card.high .number { color: var(--warning); }
+        .stat-card.medium .number { color: #3b82f6; }
+        .stat-card.low .number { color: var(--success); }
+
+        .category-icon {
+            font-size: 1.5rem;
+            margin-left: 0.5rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            border-top: 2px solid var(--border);
+            margin-top: 3rem;
+            background: var(--bg-card);
+            border-radius: 1rem;
+        }
+
+        .disclaimer {
+            background: #faf5ff;
+            border: 1px solid #d8b4fe;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .disclaimer h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            text-align: right;
+        }
+
+        .comparison-table th {
+            background: #f1f5f9;
+            font-weight: 600;
+        }
+
+        .comparison-table td:first-child {
+            background: #f8fafc;
+            font-weight: 500;
+        }
+
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="warning-icon">🔍</div>
+            <h1>تقرير ثغرات المنطق والسياق</h1>
+            <p class="subtitle">ثغرات منطق الأعمال (Business Logic) - AlMiftah Real Estate</p>
+            <div>
+                <span class="badge badge-critical">حرجة: 3</span>
+                <span class="badge badge-high">عالية: 4</span>
+                <span class="badge badge-medium">متوسطة: 4</span>
+                <span class="badge badge-low">منخفضة: 2</span>
+            </div>
+        </header>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <h4>📌 ما هي ثغرات المنطق والسياق؟</h4>
+            <p>ثغرات منطق الأعمال هي أخطاء في طريقة عمل التطبيق، حيث يمكن استغلال القواعد والعمليات بطريقة غير متوقعة. على عكس الثغرات التقنية، هذه الثغرات تعتمد على فهم سياق العمل.</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card critical">
+                <div class="number">3</div>
+                <div class="label">حرجة - استغلال مباشر لقواعد العمل</div>
+            </div>
+            <div class="stat-card high">
+                <div class="number">4</div>
+                <div class="label">عالية - تجاوز سياسات الصلاحية</div>
+            </div>
+            <div class="stat-card medium">
+                <div class="number">4</div>
+                <div class="label">متوسطة - تناقض في القواعد</div>
+            </div>
+            <div class="stat-card low">
+                <div class="number">2</div>
+                <div class="label">منخفضة - ثغرات تصعيد</div>
+            </div>
+        </div>
+
+        <!-- Table of Contents -->
+        <nav class="toc">
+            <h3>📋 جدول المحتويات</h3>
+            <ul>
+                <li><a href="#critical">⚫ ثغرات حرجة في المنطق</a></li>
+                <li><a href="#high">🟠 ثغرات عالية في الصلاحيات</a></li>
+                <li><a href="#medium">🔵 ثغرات متوسطة في القواعد</a></li>
+                <li><a href="#low">🟢 ثغرات منخفضة</a></li>
+                <li><a href="#summary">📊 ملخص المقارنات</a></li>
+            </ul>
+        </nav>
+
+        <!-- Critical Business Logic Vulnerabilities -->
+        <section id="critical" class="section">
+            <h2 class="section-title">⚫ ثغرات حرجة في المنطق (Critical)</h2>
+
+            <!-- Vulnerability 1: Owner Can Approve Own Property -->
+            <div class="vulnerability-card critical">
+                <div class="vuln-header">
+                    <span class="vuln-title">1. المالك يمكنه الموافقة على عقاره الخاص</span>
+                    <span class="badge badge-critical">حرجة</span>
+                </div>
+                <div class="vuln-location">app/Policies/PropertyPolicy.php:27, 47, 50</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>السياسة تسمح للمالك بتعليم عقاره كمباع أو مؤجر باستخدام <code>markAsSold</code> و <code>markAsRented</code> حتى لو العقار لم تتم الموافقة عليه بعد. هذا يتعارض مع منطق العمل.</p>
+                </div>
+
+                <div class="vuln-section">
+                    <h4>منطق العمل المفقود:</h4>
+                    <ul>
+                        <li>العقار يجب أن يكون في حالة <code>active</code> ليتم تعليمه كمباع/مؤجر</li>
+                        <li>لا يمكن للمالك بيع/تأجير عقار غير معتمد</li>
+                        <li>يجب أن يمر العقار بعملية الموافقة أولاً</li>
+                    </ul>
+                </div>
+
+                <div class="flow-diagram">
+                    <span class="step">owner_id == user_id</span>
+                    <span class="arrow">+</span>
+                    <span class="step" style="background: #fecaca;">No status check</span>
+                    <span class="arrow">=</span>
+                    <span class="step" style="background: #b91c1c; color: white;">CAN MARK AS SOLD</span>
+                </div>
+
+                <div class="vuln-section">
+                    <h4>نتيجة الثغرة:</h4>
+                    <ul>
+                        <li>المالك يمكنه "بيع" عقار لم تتم الموافقة عليه بعد</li>
+                        <li>تضليل المشترين المحتملين</li>
+                        <li>تحويل الأموال بدون حق</li>
+                    </ul>
+                </div>
+
+                <div class="attack-box">
+                    <h4>💀 سيناريو الهجوم:</h4>
+                    <ol style="padding-right: 1.5rem; color: var(--text-secondary);">
+                        <li>مستخدم ينشئ عقار جديد (الحالة: pending)</li>
+                        <li>بمجرد إضافة العقار، يمكنه طلب الموافقة على عقاره</li>
+                        <li>أو الأسوأ: يمكنه مباشرةً تعليمه كمباع</li>
+                        <li>يحتال على مشترٍ محتمل</li>
+                    </ol>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>// app/Policies/PropertyPolicy.php
+
+public function markAsSold(User $user, Property $property): bool
+{
+    // التحقق من أن العقار في حالة active
+    if ($property->status !== 'active') {
+        return false;
+    }
+    
+    return $user->is_admin || $property->owner_id === $user->id;
+}
+
+public function markAsRented(User $user, Property $property): bool
+{
+    // التحقق من أن العقار في حالة active
+    if ($property->status !== 'active') {
+        return false;
+    }
+    
+    return $user->is_admin || $property->owner_id === $user->id;
+}
+
+// في Controller - تحقق إضافي
+public function markAsSold(Request $request, $id)
+{
+    $property = Property::find($id);
+    
+    // تحقق من حالة العقار
+    if ($property->status !== 'active') {
+        return $this->errorResponse(
+            'لا يمكن بيع عقار غير نشط', 422
+        );
+    }
+    
+    // باقي الكود...
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 2: No Limit on Property Creation -->
+            <div class="vulnerability-card critical">
+                <div class="vuln-header">
+                    <span class="vuln-title">2. لا يوجد حد لعدد العقارات</span>
+                    <span class="badge badge-critical">حرجة</span>
+                </div>
+                <div class="vuln-location">app/Services/PropertyService.php:87-104</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>أي مستثمر موثق (email_verified) يمكنه إنشاء عدد غير محدود من العقارات. هذا يسمح بـ:</p>
+                    <ul>
+                        <li>تلاعب بالسوق العقاري</li>
+                        <li>إنشاء عقارات وهمية للاحتيال</li>
+                        <li>استنزاف موارد قاعدة البيانات</li>
+                    </ul>
+                </div>
+
+                <div class="vuln-section">
+                    <h4>منطق العمل المفقود:</h4>
+                    <ul>
+                        <li>مكتب العقار قد يكون له حد معين من العقارات</li>
+                        <li>المستخدم العادي قد لا يحتاج أكثر من عدد محدد</li>
+                        <li>يجب التحقق من نوع الحساب (مكتب vs مستخدم)</li>
+                    </ul>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>// أضف في User Model
+public function getMaxPropertiesAttribute(): int
+{
+    return match($this->role) {
+        'owner' => 100,  // مكاتب العقارات
+        'user' => 5,     // المستخدم العادي
+        default => 0,
+    };
+}
+
+public function getCurrentPropertiesCountAttribute(): int
+{
+    return $this->properties()->count();
+}
+
+public function canAddProperty(): bool
+{
+    return $this->current_properties_count 
+        < $this->max_properties;
+}
+
+// في PropertyService::create
+public function create(array $data, int $userId): Property
+{
+    $user = User::find($userId);
+    
+    if (!$user->canAddProperty()) {
+        throw new \Exception(
+            'لقد وصلت للحد الأقصى من العقارات المسموحة'
+        );
+    }
+    
+    // باقي الكود...
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 3: Contact Request for Own Property -->
+            <div class="vulnerability-card critical">
+                <div class="vuln-header">
+                    <span class="vuln-title">3. المستخدم يمكنه طلب التواصل مع عقاره الخاص</span>
+                    <span class="badge badge-critical">حرجة</span>
+                </div>
+                <div class="vuln-location">app/Services/ContactService.php:11-33</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>لا يوجد تحقق من أن المستخدم الذي يرسل طلب التواصل ليس نفس مالك العقار. هذا يسمح للمالك بطلب التواصل مع نفسه!</p>
+                </div>
+
+                <div class="flow-diagram">
+                    <span class="step">user_id</span>
+                    <span class="arrow">==</span>
+                    <span class="step">property.owner_id</span>
+                    <span class="arrow">=</span>
+                    <span class="step" style="background: #fecaca;">SELF CONTACT REQUEST</span>
+                </div>
+
+                <div class="vuln-section">
+                    <h4>مشاكل هذه الثغرة:</h4>
+                    <ul>
+                        <li>إرسال إشعارات غير ضرورية للمالك</li>
+                        <li>تلاعب بنظام طلبات التواصل</li>
+                        <li>إمكانية استغلال رقم هاتف المالك</li>
+                    </ul>
+                </div>
+
+                <div class="attack-box">
+                    <h4>💀 سيناريو الهجوم:</h4>
+                    <ol style="padding-right: 1.5rem; color: var(--text-secondary);">
+                        <li>مستخدم يضيف عقار (مكتب عقار)</li>
+                        <li>بصفتك مستخدم آخر، تطلب التواصل مع العقار</li>
+                        <li>باستخدام ثغرة ثانية، يمكنك رؤية رقم هاتف المالك</li>
+                        <li>لأن صاحب العقار يمكنه "طلب التواصل مع نفسه"</li>
+                    </ol>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>// app/Services/ContactService.php
+
+public function create(array $data, int $userId): ContactRequestModel
+{
+    $property = Property::findOrFail($data['property_id']);
+    
+    // ✅ إضافة التحقق الجديد
+    if ($property->owner_id === $userId) {
+        throw new \Exception(
+            'لا يمكنك إرسال طلب تواصل لعقارك الخاص'
+        );
+    }
+    
+    // التحقق من وجود طلب سابق
+    $existingRequest = ContactRequestModel::where('property_id', $data['property_id'])
+        ->where('user_id', $userId)
+        ->whereIn('status', ['pending', 'approved'])
+        ->first();
+
+    if ($existingRequest) {
+        throw new \Exception(
+            'لديك طلب تواصل سابق لهذا العقار'
+        );
+    }
+
+    return ContactRequestModel::create([
+        'property_id' => $data['property_id'],
+        'user_id' => $userId,
+        'owner_id' => $property->owner_id,
+        'name' => $data['name'],
+        'phone' => $data['phone'],
+        'message' => $data['message'] ?? null,
+        'status' => 'pending',
+    ]);
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- High Authorization Vulnerabilities -->
+        <section id="high" class="section">
+            <h2 class="section-title">🟠 ثغرات عالية في الصلاحيات (Authorization)</h2>
+
+            <!-- Vulnerability 4: Role Confusion -->
+            <div class="vulnerability-card high">
+                <div class="vuln-header">
+                    <span class="vuln-title">4. تناقض في التحقق من الأدوار</span>
+                    <span class="badge badge-high">عالية</span>
+                </div>
+                <div class="vuln-location">app/Models/User.php:43, 90 | app/Policies/*.php</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>هناك طريقتان للتحقق من صلاحية الأدمن في الكود:</p>
+                    <ul>
+                        <li><code>$user->is_admin</code> (attribute من $appends)</li>
+                        <li><code>$user->isAdmin()</code> (method)</li>
+                    </ul>
+                    <p>السياسات تستخدم الطريقتين بشكل متبادل، مما قد يسبب تناقضات.</p>
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>الطريقة</th>
+                            <th>الملف</th>
+                            <th>الاستخدام</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>is_admin</code></td>
+                            <td>PropertyPolicy</td>
+                            <td><code>return $user->is_admin</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>isAdmin()</code></td>
+                            <td>AdminController</td>
+                            <td><code>$request->user()->isAdmin()</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>role === 'admin'</code></td>
+                            <td>AuthService</td>
+                            <td>تسجيل الخروج</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="vuln-section">
+                    <h4>المشكلة:</h4>
+                    <p>إذا تم تغيير طريقة التحقق في مكان واحد دون الآخر، ستحدث ثغرات.</p>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>// أستخدم طريقة واحدة فقط - الأفضل Method
+
+// في User Model - أزل $appends
+// protected $appends = ['is_admin']; // ❌ أزل هذا
+
+// استخدم Method دائماً
+public function isAdmin(): bool
+{
+    return $this->role === 'admin';
+}
+
+// في كل السياسات
+public function approve(User $user, Property $property): bool
+{
+    return $user->isAdmin(); // ✅ طريقة موحدة
+}
+
+// في Controllers
+if (!$request->user()->isAdmin()) {
+    return $this->errorResponse('غير مصرح', 403);
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 5: Admin Can Modify Themselves -->
+            <div class="vulnerability-card high">
+                <div class="vuln-header">
+                    <span class="vuln-title">5. الأدمن يمكنه تعديل/حظر نفسه</span>
+                    <span class="badge badge-high">عالية</span>
+                </div>
+                <div class="vuln-location">app/Policies/UserPolicy.php:26, 39, 41, 49</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>معظم السياسات تمنع الأدمن من تعديل نفسه (<code>$user->id !== $targetUser->id</code>)، لكن بعض العمليات تفتقر لهذا التحقق.</p>
+                </div>
+
+                <div class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>العملية</th>
+                            <th>تسمح بتعديل النفس؟</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>delete</td>
+                            <td style="color: var(--success);">❌ لا</td>
+                        </tr>
+                        <tr>
+                            <td>verifyUser</td>
+                            <td style="color: var(--success);">❌ لا</td>
+                        </tr>
+                        <tr>
+                            <td>banUser</td>
+                            <td style="color: var(--success);">❌ لا</td>
+                        </tr>
+                        <tr>
+                            <td>unbanUser</td>
+                            <td style="color: var(--success);">❌ لا</td>
+                        </tr>
+                        <tr>
+                            <td>toggleUserActive</td>
+                            <td style="color: var(--success);">❌ لا</td>
+                        </tr>
+                        <tr>
+                            <td>update</td>
+                            <td style="color: #dc2626;">⚠️ نعم (خطأ)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="attack-box">
+                    <h4>💀 سيناريو الهجوم:</h4>
+                    <ol style="padding-right: 1.5rem; color: var(--text-secondary);">
+                        <li>أدمن يعدل دور نفسه من admin إلى user</li>
+                        <li>يفقد جميع صلاحياته</li>
+                        <li>لا يمكنه العودة (لا صلاحية)</li>
+                    </ol>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>// app/Policies/UserPolicy.php
+
+public function update(User $user, User $targetUser): bool
+{
+    // الأدمن يمكنه تعديل أي مستخدم، لكن لا يمكنه تعديل نفسه
+    return $user->isAdmin() && $user->id !== $targetUser->id;
+}
+
+// أو إذا كان التعديل الذاتي مسموح
+public function update(User $user, User $targetUser): bool
+{
+    // المستخدم يمكنه تعديل نفسه، الأدمن يمكنه تعديل أي شخص
+    return $user->isAdmin() || $user->id === $targetUser->id;
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 6: Missing Ownership Verification -->
+            <div class="vulnerability-card high">
+                <div class="vuln-header">
+                    <span class="vuln-title">6. عدم التحقق من ملكية طلب التواصل</span>
+                    <span class="badge badge-high">عالية</span>
+                </div>
+                <div class="vuln-location">app/Policies/ContactRequestPolicy.php:20-25</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>سياسة <code>view</code> تتحقق من أن المستخدم هو صاحب الطلب أو المالك، لكن:</p>
+                    <ul>
+                        <li>لا تتحقق من حالة الطلب (pending/approved/rejected)</li>
+                        <li>لا تتحقق من حالة العقار</li>
+                        <li>لا تتحقق من تاريخ الطلب</li>
+                    </ul>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>public function view(User $user, ContactRequest $contactRequest): bool
+{
+    // الأدمن يمكنه رؤية كل الطلبات
+    if ($user->isAdmin()) {
+        return true;
+    }
+    
+    // المستخدم العادي
+    $isOwner = $contactRequest->user_id === $user->id;
+    $isPropertyOwner = $contactRequest->owner_id === $user->id;
+    
+    // فقط المالك يرى الطلبات المقبولة
+    // المستخدم يرى طلباته فقط
+    if ($isOwner) {
+        return true;
+    }
+    
+    if ($isPropertyOwner && $contactRequest->status === 'approved') {
+        return true;
+    }
+    
+    return false;
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 7: Unverified Users Can View Properties -->
+            <div class="vulnerability-card high">
+                <div class="vuln-header">
+                    <span class="vuln-title">7. المستخدم غير الموثق يمكنه رؤية العقارات</span>
+                    <span class="badge badge-high">عالية</span>
+                </div>
+                <div class="vuln-location">app/Policies/PropertyPolicy.php:10-18</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>سياسة <code>viewAny</code> و <code>view</code> تعودان بـ <code>true</code> دائماً، بغض النظر عن حالة توثيق المستخدم.</p>
+                </div>
+
+                <div class="vuln-section">
+                    <h4>مشكلة المنطق:</h4>
+                    <ul>
+                        <li>لماذا نطلب توثيق البريد إذا كان المستخدم غير الموثق يمكنه رؤية كل شيء؟</li>
+                        <li>التوثيق يصبح عديم الفائدة تقريباً</li>
+                    </ul>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>public function viewAny(User $user): bool
+{
+    // الجميع يمكنه رؤية العقارات المنشورة (للتصفح)
+    return true;
+}
+
+public function view(User $user, Property $property): bool
+{
+    // الجميع يمكنه رؤية العقار
+    return true;
+}
+
+// لكن عند طلب التفاصيل الكاملة أو التواصل
+public function viewFullDetails(User $user, Property $property): bool
+{
+    // تفاصيل أكثر تتطلب توثيق
+    return $user && $user->email_verified_at !== null;
+}
+
+public function contact(User $user): bool
+{
+    // طلب التواصل يتطلب توثيق
+    return $user && $user->email_verified_at !== null;
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Medium Logic Issues -->
+        <section id="medium" class="section">
+            <h2 class="section-title">🔵 ثغرات متوسطة في القواعد (Business Rules)</h2>
+
+            <!-- Vulnerability 8: Status Transition Rules -->
+            <div class="vulnerability-card medium">
+                <div class="vuln-header">
+                    <span class="vuln-title">8. لا توجد قواعد انتقالات الحالة</span>
+                    <span class="badge badge-medium">متوسطة</span>
+                </div>
+                <div class="vuln-location">app/Services/PropertyService.php:188-219</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>لا يوجد تحقق من حالة العقار قبل تغييرها. يمكن:</p>
+                    <ul>
+                        <li>تغيير عقار مرفوض إلى مؤجر مباشرة</li>
+                        <li>الموافقة على عقار他已经 sold</li>
+                        <li>رفض عقار already active</li>
+                    </ul>
+                </div>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>من حالة</th>
+                            <th>إلى حالة</th>
+                            <th>صحيح؟</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>pending</td><td>active</td><td>✅ صحيح</td></tr>
+                        <tr><td>pending</td><td>rejected</td><td>✅ صحيح</td></tr>
+                        <tr><td>active</td><td>sold</td><td>✅ صحيح</td></tr>
+                        <tr><td>active</td><td>rented</td><td>✅ صحيح</td></tr>
+                        <tr><td>rejected</td><td>sold</td><td>❌ خطأ</td></tr>
+                        <tr><td>sold</td><td>active</td><td>❌ خطأ</td></tr>
+                        <tr><td>rented</td><td>sold</td><td>⚠️ спорно</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>private function canTransition(string $from, string $to): bool
+{
+    $rules = [
+        'pending' => ['active', 'rejected'],
+        'active' => ['rented', 'sold'],
+        'rented' => ['sold', 'active'], // إذا ended rental
+        'sold' => [], // حالة نهائية
+        'rejected' => ['pending'], // يمكن إعادة التقديم
+    ];
+    
+    return in_array($to, $rules[$from] ?? []);
+}
+
+public function approve(Property $property, int $adminId): Property
+{
+    if (!$this->canTransition($property->status, 'active')) {
+        throw new \InvalidArgumentException(
+            'لا يمكن الموافقة على عقار في حالة: ' . $property->status
+        );
+    }
+    
+    $property->update([
+        'status' => 'active',
+        'approved_by' => $adminId,
+        'approved_at' => now(),
+    ]);
+    
+    return $property;
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 9: Rejected Requests Can Be Approved -->
+            <div class="vulnerability-card medium">
+                <div class="vuln-header">
+                    <span class="vuln-title">9. طلب التواصل المرفوض يمكن الموافقة عليه</span>
+                    <span class="badge badge-medium">متوسطة</span>
+                </div>
+                <div class="vuln-location">app/Http/Controllers/AdminController.php:225-255</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>التحقق من حالة الطلب يتحقق فقط من أنه ليس <code>pending</code>، لكنه لا يمنع الموافقة على طلب مرفوض.</p>
+                </div>
+
+                <div class="code-block">
+                    <pre>// الكود الحالي (AdminController.php:236)
+if ($contactRequest->status !== 'pending') {
+    return $this->errorResponse('تم معالجة هذا الطلب مسبقاً', 400);
+}
+
+// لكن ماذا لو status = 'rejected'؟
+// الكود يسمح بـ approve إذا لم يكن pending</pre>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>public function approveContactRequest(Request $request, $id)
+{
+    $contactRequest = ContactRequest::find($id);
+    
+    if (!$contactRequest) {
+        return $this->errorResponse('طلب التواصل غير موجود', 404);
+    }
+
+    if (!Gate::allows('approve', $contactRequest)) {
+        return $this->errorResponse('غير مصرح', 403);
+    }
+
+    // ✅ تحقق دقيق
+    if ($contactRequest->status !== 'pending') {
+        $messages = [
+            'approved' => 'تم الموافقة على هذا الطلب مسبقاً',
+            'rejected' => 'لا يمكن الموافقة على طلب مرفوض',
+        ];
+        return $this->errorResponse(
+            $messages[$contactRequest->status] ?? 'تم معالجة هذا الطلب',
+            400
+        );
+    }
+
+    // باقي الكود...
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 10: Message Length Not Limited -->
+            <div class="vulnerability-card medium">
+                <div class="vuln-header">
+                    <span class="vuln-title">10. لا يوجد حد لطول رسالة طلب التواصل</span>
+                    <span class="badge badge-medium">متوسطة</span>
+                </div>
+                <div class="vuln-location">app/Http/Requests/StoreContactRequest.php:20</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>رسالة طلب التواصل (<code>message</code>) يمكن أن تكون طويلة جداً، مما يسبب:</p>
+                    <ul>
+                        <li>تلاعب بالتصميم</li>
+                        <li>رسائل spam</li>
+                        <li>تخزين غير ضروري</li>
+                    </ul>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>'message' => 'nullable|string|max:1000', // 1000 حرف كحد أقصى</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 11: Price Can Be Zero -->
+            <div class="vulnerability-card medium">
+                <div class="vuln-header">
+                    <span class="vuln-title">11. السعر يمكن أن يكون صفر</span>
+                    <span class="badge badge-medium">متوسطة</span>
+                </div>
+                <div class="vuln-location">app/Http/Requests/PropertyRequest.php:22</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>التحقق من السعر يستخدم <code>min:0</code> مما يسمح بالسعر 0.</p>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>'price' => 'required|numeric|min:1', // حد أدنى 1</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Low Vulnerabilities -->
+        <section id="low" class="section">
+            <h2 class="section-title">🟢 ثغرات منخفضة (Low)</h2>
+
+            <!-- Vulnerability 12 -->
+            <div class="vulnerability-card low">
+                <div class="vuln-header">
+                    <span class="vuln-title">12. لا يوجد تحقق من نوع المستخدم عند التسجيل</span>
+                    <span class="badge badge-low">منخفضة</span>
+                </div>
+                <div class="vuln-location">app/Http/Requests/AuthRequest.php:24</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>عند التسجيل، المستخدم يختار دوره (user/owner). لكن:</p>
+                    <ul>
+                        <li>لا يوجد تحقق من صحة هذا الاختيار</li>
+                        <li>يمكن لأي شخص التسجيل كـ "owner" مباشرة</li>
+                        <li>لا يوجد توثيق إضافي للمكاتب العقارية</li>
+                    </ul>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>// للتسجيل العادي، دائماً 'user'
+// الـ owner يتم ترقيته من الأدمن
+
+// في AuthRequest للـ register
+'role' => 'nullable|in:user', // لا يختار الدور
+
+// الدور يحدد فقط عند الترقية من الأدمن
+// في createUser للأدمن
+'role' => 'required|in:user,owner,admin',</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vulnerability 13 -->
+            <div class="vulnerability-card low">
+                <div class="vuln-header">
+                    <span class="vuln-title">13. عدم وجود حد أقصى لحجم الوصف</span>
+                    <span class="badge badge-low">منخفضة</span>
+                </div>
+                <div class="vuln-location">app/Http/Requests/PropertyRequest.php:21</div>
+
+                <div class="vuln-section">
+                    <h4>الوصف:</h4>
+                    <p>وصف العقار لا يحتوي على حد أقصى للطول.</p>
+                </div>
+
+                <div class="fix-box">
+                    <h4>الحل:</h4>
+                    <div class="code-block">
+                        <pre>'description' => 'required|string|max:5000', // 5000 حرف</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Summary -->
+        <section id="summary" class="section">
+            <h2 class="section-title">📊 ملخص المقارنات</h2>
+
+            <h3 style="color: var(--primary); margin: 1.5rem 0;">مصفوفة الصلاحيات المفترضة</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>العملية</th>
+                        <th>المستخدم</th>
+                        <th>المكتب العقاري</th>
+                        <th>الأدمن</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>رؤية العقارات</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>إضافة عقار</td>
+                        <td>❌ (غير موثق) / ⚠️ (موثق)</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>تعديل عقاره</td>
+                        <td>⚠️ (pending فقط)</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>حذف عقاره</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>بيع/تأجير عقاره</td>
+                        <td>⚠️ (active فقط)</td>
+                        <td>⚠️ (active فقط)</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>طلب التواصل</td>
+                        <td>⚠️ (غير مالك)</td>
+                        <td>⚠️ (غير مالك)</td>
+                        <td>✅</td>
+                    </tr>
+                    <tr>
+                        <td>إدارة المستخدمين</td>
+                        <td>❌</td>
+                        <td>❌</td>
+                        <td>✅</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="color: var(--primary); margin: 2rem 0;">رموز الحالة</h3>
+            <ul style="color: var(--text-secondary);">
+                <li>✅ مسموح</li>
+                <li>❌ غير مسموح</li>
+                <li>⚠️ مسموح مع قيود</li>
+            </ul>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>تقرير ثغرات المنطق والسياق - AlMiftah Real Estate</p>
+            <p>تاريخ التقرير: 2024</p>
+            <p style="margin-top: 1rem; color: var(--primary);">
+                🔍 هذه ثغرات منطق الأعمال - تتطلب تحليلاً دقيقاً للسياق
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
