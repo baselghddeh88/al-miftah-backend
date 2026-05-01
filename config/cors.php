@@ -2,32 +2,23 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Cross-Origin Resource Sharing (CORS) Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure your settings for cross-origin resource sharing
-    | or "CORS". This determines what cross-origin operations may execute
-    | in web browsers. You are free to adjust these settings as needed.
-    |
-    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
-    |
-    */
-
     'paths' => ['api/*'],
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
         'http://localhost:3000',
         'http://127.0.0.1:3000',
-'https://almiftah-real-estate.web.app',
-'https://recycling-buccaneer-outdoors.ngrok-free.dev'
+        'http://localhost:51295',
+        'http://127.0.0.1:51295',
+        'https://almiftah-real-estate.web.app',
+        'https://recycling-buccaneer-outdoors.ngrok-free.dev',
+        'https://al-miftah-production.up.railway.app',
     ],
 
-'allowed_origins_patterns' => [
-    '#^https://[a-z0-9\-]+\.ngrok-free\.app$#',
-],
+    'allowed_origins_patterns' => [
+        '#^https://[a-z0-9\-]+\.ngrok-free\.app$#',
+        '#^http://localhost:\d+$#',
+    ],
 
     'allowed_headers' => ['*'],
 
